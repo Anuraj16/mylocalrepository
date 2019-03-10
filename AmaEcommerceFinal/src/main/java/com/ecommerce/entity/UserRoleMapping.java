@@ -4,10 +4,8 @@ import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
-import javax.persistence.Table;
 
 import com.ecommerce.compositeKey.UserRoleMappingId;
 /*@Entity
@@ -26,7 +24,7 @@ public class UserRoleMapping {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private int id;
 	
-	private int rowstate;
+	//private int rowstate;
 	
 	public UserRoleMapping() {
 		// TODO Auto-generated constructor stub
@@ -53,12 +51,12 @@ public class UserRoleMapping {
 		this.id = id;
 	}
 
-	public int getRowstate() {
+	/*public int getRowstate() {
 		return rowstate;
 	}
 
 	public void setRowstate(int rowstate) {
 		this.rowstate = rowstate;
-	}
+	}*/
 
 }

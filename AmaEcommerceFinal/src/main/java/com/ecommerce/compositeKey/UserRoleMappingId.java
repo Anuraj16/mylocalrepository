@@ -12,7 +12,7 @@ public class UserRoleMappingId implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private int urmroleid;
+	private long urmroleid;
 	private String username;
 	
 	public UserRoleMappingId() {
@@ -24,10 +24,10 @@ public class UserRoleMappingId implements Serializable{
 		this.username=username;
 	}
 	
-	public int getUrmroleid() {
+	public long getUrmroleid() {
 		return urmroleid;
 	}
-	public void setUrmroleid(int urmroleid) {
+	public void setUrmroleid(long urmroleid) {
 		this.urmroleid = urmroleid;
 	}
 	public String getUsername() {

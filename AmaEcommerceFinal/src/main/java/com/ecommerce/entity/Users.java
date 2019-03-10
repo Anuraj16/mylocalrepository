@@ -1,14 +1,16 @@
 package com.ecommerce.entity;
 
 import java.io.Serializable;
-import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -69,12 +71,14 @@ private static final long serialVersionUID = 1L;
 	/*commented for testing*/
 	
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private int id;
 	private String userName;
 	private String password;
 	private String emailId;
 	private double phone;
 	private int active;
-	private HashSet<UserRole> roles;
+	private Set<UserRole> roles;
 	private String firstName;
 	private String lastName;
 	
@@ -544,14 +548,22 @@ private static final long serialVersionUID = 1L;
 		this.lastName = lastName;
 	}
 	
-	@OneToMany
-	@JoinTable(name = "userrolemapping", joinColumns ={ @JoinColumn(name = "username")}, inverseJoinColumns = @JoinColumn(name = "id"))
-	public HashSet<UserRole> getRoles() {
+	@ManyToMany
+	@JoinTable(name = "userrolemapping", joinColumns ={ @JoinColumn(name = "username")}, inverseJoinColumns = @JoinColumn(name = "role_id"))
+	public Set<UserRole> getRoles() {
 		return roles;
 	}
 
-	public void setRoles(HashSet<UserRole> roles) {
+	public void setRoles(Set<UserRole> roles) {
 		this.roles = roles;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 

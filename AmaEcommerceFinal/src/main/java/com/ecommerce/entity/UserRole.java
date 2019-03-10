@@ -9,9 +9,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @Entity
+@SequenceGenerator(name="seq",initialValue=1,allocationSize=100)
 @Table (name="userrole")
 public class UserRole implements Serializable{
 
@@ -22,21 +24,21 @@ public class UserRole implements Serializable{
 	public static final String ROLE_ADMIN = "ADMIN";
     public static final String ROLE_USER = "USER";
 	
-	private int roleId;
+	private int role_id;
 	//private Users user;
 	private String userRole;
 	private Long rowstate ;
 	private Set<Users> users;
 
 	@Id
-	@Column(name = "id", nullable = false)
+	@Column(name = "role_id", nullable = false)
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	public int getRoleId() {
-	return roleId;
+	public int getRole_id() {
+		return role_id;
 	}
 
-	public void setRoleId(int roleId) {
-	this.roleId = roleId;
+	public void setRole_id(int role_id) {
+		this.role_id = role_id;
 	}
 
 	/*@ManyToOne(fetch = FetchType.LAZY)
@@ -63,6 +65,7 @@ public class UserRole implements Serializable{
 	this.userRole = userRole;
 	}
 
+	@GeneratedValue(strategy=GenerationType.SEQUENCE,generator="seq")
 	public Long getRowstate() {
 	return rowstate;
 	}
