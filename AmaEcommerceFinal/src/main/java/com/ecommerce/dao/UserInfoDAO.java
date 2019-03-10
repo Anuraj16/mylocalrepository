@@ -43,7 +43,7 @@ public class UserInfoDAO {
 			Session session = sessionFactory.getCurrentSession();
 			//users=(Users) session.get(Users.class, userName.trim());
 	        Criteria crit = session.createCriteria(Users.class)
-	        		.add(Restrictions.eq("userName", userName));
+	        		.add(Restrictions.eq("username", userName));
 	        users=(Users) crit.uniqueResult();
 			
 		} catch (Exception e) {

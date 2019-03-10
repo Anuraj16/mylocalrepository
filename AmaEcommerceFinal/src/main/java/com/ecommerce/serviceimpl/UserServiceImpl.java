@@ -16,6 +16,7 @@ public class UserServiceImpl implements UserService {
 		System.out.println("in userservice impl");
 		try {
 			Session session = sessionFactory.getCurrentSession();
+			System.out.println(user.getUsername()+" #### "+user.getRoles());
 			session.persist(user);
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -121,7 +121,7 @@ public class MainController {
 		user.setActive(1);
 		
 		UserRole userrole = new UserRole();
-		userrole.setRoleId(2);
+		userrole.setRole_id(2);
 		HashSet<UserRole> roleSet= new HashSet<UserRole>();
 		roleSet.add(userrole);
 		

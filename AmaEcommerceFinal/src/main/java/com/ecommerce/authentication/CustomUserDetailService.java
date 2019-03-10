@@ -40,7 +40,7 @@ public class CustomUserDetailService implements UserDetailsService{
 		System.out.println("UserInfo= " + user);
 
 		// [USER,ADMIN,..]
-		List <UserRoleMapping> userRoleList= userInfoDAO.getUserRoles(user.getUserName());
+		List <UserRoleMapping> userRoleList= userInfoDAO.getUserRoles(user.getUsername());
 		GrantedAuthority authority=null;
 		for (UserRoleMapping userRole : userRoleList) {
 			if(userRole.getUserRoleMappingId().getUrmroleid()==1){
@@ -68,7 +68,7 @@ public class CustomUserDetailService implements UserDetailsService{
         boolean credentialsNonExpired = true;
         boolean accountNonLocked = true;*/
  
-        UserDetails userDetails = (UserDetails) new User(user.getUserName(), //
+        UserDetails userDetails = (UserDetails) new User(user.getUsername(), //
         		user.getPassword(), grantList);
  
         return userDetails;

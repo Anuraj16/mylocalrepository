@@ -203,9 +203,9 @@
            action="${pageContext.request.contextPath}/createUser">
             <div class="form-group">
              <!--  <label for="usrname"><span class="glyphicon glyphicon-user"></span> Username</label> -->
-              <form:label path="userName"><span class="glyphicon glyphicon-user"></span>Username</form:label>
+              <form:label path="username"><span class="glyphicon glyphicon-user"></span>Username</form:label>
               <!-- <input type="text" class="form-control" name="username" placeholder="Enter email"> -->
-              <form:input path="userName" class="form-control" name="userName" id="userName" />
+              <form:input path="username" class="form-control" name="username" id="username" />
             </div>
             <div class="form-group">
               <!-- <label for="psw"><span class="glyphicon glyphicon-eye-open"></span> Password</label> -->
