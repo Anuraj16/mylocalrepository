@@ -74,7 +74,7 @@
                 <ul>
                     <li><a href="${pageContext.request.contextPath}/index">Home</a></li>
                     <li><a href="${pageContext.request.contextPath}/shop">Shop</a></li>
-                    <li class="active"><a href="${pageContext.request.contextPath}/productdetails">Product</a></li>
+                    <li class="active"><a href="${pageContext.request.contextPath}/productDetails">Product</a></li>
                     <li><a href="${pageContext.request.contextPath}/cart">Cart</a></li>
                     <li><a href="${pageContext.request.contextPath}/checkout">Checkout</a></li>
                 </ul>
@@ -162,7 +162,7 @@
                             <div class="product-meta-data">
                                 <div class="line"></div>
                                 <p class="product-price">$180</p>
-                                <a href="${pageContext.request.contextPath}/productdetails">
+                                <a href="${pageContext.request.contextPath}/productDetails">
                                     <h6>White Modern Chair</h6>
                                 </a>
                                 <!-- Ratings & Review -->
@@ -266,7 +266,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
                                             <a class="nav-link" href="${pageContext.request.contextPath}/shop">Shop</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="${pageContext.request.contextPath}/productdetails">Product</a>
+                                            <a class="nav-link" href="${pageContext.request.contextPath}/productDetails">Product</a>
                                         </li>
                                         <li class="nav-item">
                                             <a class="nav-link" href="${pageContext.request.contextPath}/cart">Cart</a>

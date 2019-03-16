@@ -62,12 +62,12 @@ new CustomFilter(), BasicAuthenticationFilter.class);*/
 		.loginProcessingUrl("/j_spring_security_check") // Submit URL
 		.loginPage("/login")//
 		/*.defaultSuccessUrl("/home")*///
-		.defaultSuccessUrl("/home")
+		.defaultSuccessUrl("/index")
 		.failureUrl("/index?error=true")//
 		.usernameParameter("username")//
 		.passwordParameter("password")
 		// Config for Logout Page
-		.and().logout().logoutUrl("/logout");
+		.and().logout().logoutUrl("/logout").logoutSuccessUrl("/");
 
 	}
 }

@@ -37,28 +37,26 @@ public class CustomUserDetailService implements UserDetailsService{
 		}*/
 		System.out.println("username "+username);
 		Users user = userInfoDAO.findUserInfo(username);
-		System.out.println("UserInfo= " + user);
+		System.out.println("UserInfo= " + user.getId());
 
 		// [USER,ADMIN,..]
-		List <UserRoleMapping> userRoleList= userInfoDAO.getUserRoles(user.getUsername());
+		List <UserRoleMapping> userRoleList= userInfoDAO.getUserRoles(user.getId());
 		GrantedAuthority authority=null;
+		 List<GrantedAuthority> grantList = new ArrayList<GrantedAuthority>();
 		for (UserRoleMapping userRole : userRoleList) {
-			if(userRole.getUserRoleMappingId().getUrmroleid()==1){
+			if(userRole.getUserRoleMappingId().getRole_id()==1){
 				authority= new SimpleGrantedAuthority("ROLE_ADMIN");
 			}else{
 				authority= new SimpleGrantedAuthority("ROLE_USER");
 			}
-				
-			
+			/*authority= new SimpleGrantedAuthority("ROLE_"+userRole.getUserRoleMappingId());*/
+			 grantList.add(authority);
 		}
-		 
-        List<GrantedAuthority> grantList = new ArrayList<GrantedAuthority>();
+		 System.out.println("grantList size "+grantList.size());
+       
  
         // ROLE_EMPLOYEE, ROLE_MANAGER
          
- 
-        grantList.add(authority);
- 
       /*  boolean enabled = false;
         		if(user.getActive()==1){
         			enabled=true;

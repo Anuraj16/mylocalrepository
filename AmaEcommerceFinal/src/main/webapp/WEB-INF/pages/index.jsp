@@ -2,6 +2,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="security"%>
 <html lang="en">
 
 <head>
@@ -71,20 +72,6 @@
             <div class="nav-close">
                 <i class="fa fa-close" aria-hidden="true"></i>
             </div>
-            <div>
-            <c:if test="${firstname != null}">
-            Welcome firstname ${firstname}
-            </c:if>
-            
-            <c:if test="${pageContext.request.userPrincipal.name != null}">
-        	<%-- <form id="logoutForm" method="POST" action="${contextPath}/logout">
-            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-        	</form> --%>
-
-        	<h2>Welcome userprincipal ${pageContext.request.userPrincipal.name}</h2>
-
-    		</c:if>
-            </div>
             <!-- Logo -->
             <div class="logo">
                 <a href="${pageContext.request.contextPath}/index"><img src="img/core-img/logo.png" alt=""></a>
@@ -92,38 +79,23 @@
             <!-- Amado Nav -->
             <nav class="amado-nav">
                 <ul>
-                
-                
-                	<li class="active">
-                	
-                	</li>
+                	<!-- <li class="active">
+                	</li> -->
+                	<c:choose>
+                	<c:when test="${pageContext.request.userPrincipal.name != null}">
+                	<li><span>Welcome ${pageContext.request.userPrincipal.name}</span></li>
+                	<li><a href="${pageContext.request.contextPath}/logout">Logout</a></li>
+                	<security:authorize  access="hasRole('ROLE_USER')">
+                	<li><a href="${pageContext.request.contextPath}/orders">Orders</a></li>
+                	</security:authorize>
+                	</c:when>
+                	<c:otherwise>
                 	<li>
 						<a href="#" data-toggle="modal" data-target="#myModal" onClick="$('#loginModalId').show(); $('#signupModalId').hide()">Login/Signup</a>
-                	 <!-- Modal -->
-							<!-- <div class="modal fade" id="myModal" tabindex="-1">
-								<div class="modal-dialog">
-
-									Modal content
-									<div class="modal-content">
-										<div class="modal-header">
-											<button type="button" class="close" data-dismiss="modal">&times;</button>
-											<h4 class="modal-title">Login</h4>
-										</div>
-										<div class="modal-body" >
-											<p background-color="green">Some text in the modal.</p>
-										</div>
-										<div class="modal-footer">
-											<button type="button" class="btn btn-default"
-												data-dismiss="modal">Close</button>
-										</div>
-									</div>
-
-								</div>
-							</div> -->
-	
                 	</li>
-                	
-                    <li class="active"><a href="${pageContext.request.contextPath}/index">Home</a></li>
+                	</c:otherwise>
+                	</c:choose>
+                    <%-- <li class="active"><a href="${pageContext.request.contextPath}/index">Home</a></li> --%>
                     <li><a href="${pageContext.request.contextPath}/shop">Shop</a></li>
                     <li><a href="${pageContext.request.contextPath}/productDetails">Product</a></li>
                     <li><a href="${pageContext.request.contextPath}/cart">Cart</a></li>
@@ -364,22 +336,26 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
           <button type="button" class="close" data-dismiss="modal">&times;</button>
         </div>
         <div class="modal-body" style="padding:40px 50px;">
-          <!-- <form role="form" action="LoginUser" name="Customers" method="post"> -->
-          <form method="POST"
+           <form:form id="signInForm" method="POST" modelAttribute="user"
            action="${pageContext.request.contextPath}/j_spring_security_check">
             <div class="form-group">
-              <label for="usrname"><span class="glyphicon glyphicon-user"></span> Username</label>
-              <input type="text" class="form-control" name="username" placeholder="Enter email">
+               <form:label path="username"><span class="glyphicon glyphicon-user"></span>Username</form:label>
+              <!-- <input type="text" class="form-control" name="username" placeholder="Enter email"> -->
+              <form:input path="username" class="form-control" name="username" id="username" />
             </div>
             <div class="form-group">
-              <label for="psw"><span class="glyphicon glyphicon-eye-open"></span> Password</label>
-              <input type="text" class="form-control" name="password" placeholder="Enter password">
+              <form:label path="password"><span class="glyphicon glyphicon-eye-open"></span> Password</form:label>
+              <form:password path="password" class="form-control" name="password" id="password" />
             </div>
-            <div class="checkbox">
-              <label><input type="checkbox" value="" checked>Remember me</label>
-            </div>
-              <button type="submit" class="btn btn-success btn-block"><span class="glyphicon glyphicon-off"></span> Login</button>
-          </form>
+            <!-- commented for now will be added later -->
+           <%--  <div class="checkbox">
+              <!-- <label><input type="checkbox" value="" checked>Remember me</label> -->
+               <form:label path="rememberMe"><form:input path="rememberMe" type="checkbox" class="form-control" id="rememberMe" /> Password</form:label>
+            </div> --%>
+             <!--  <button type="submit" class="btn btn-success btn-block"><span class="glyphicon glyphicon-off"></span> Login</button> -->
+              
+               <form:button id="submit" name="submit" class="btn btn-success btn-block"><span class="glyphicon glyphicon-off"></span> Login</form:button>
+         </form:form>
         </div>
         <div class="modal-footer">
           <button type="submit" class="btn btn-danger btn-default pull-left" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Cancel</button>
@@ -391,6 +367,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
           <p>Forgot <a href="#">Password?</a></p>
         </div>
       </div>
+      
       
       <!-- signup window starts -->
       

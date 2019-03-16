@@ -52,16 +52,15 @@ public class UserInfoDAO {
 	        return users;
 	}
 	
-	public ArrayList<UserRoleMapping> getUserRoles(String username) {
+	public ArrayList<UserRoleMapping> getUserRoles(int roleid) {
 		/*String sql = "Select r.userRole "//
 		+ " from " + UserRole.class.getName() + " r where r.user.username = :username and r.rowstate>=1";*/
-		System.out.println("username "+username);
+		System.out.println("roleid "+roleid);
 		ArrayList<UserRoleMapping> roleMappings= null;
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			Criteria crit = session.createCriteria(UserRoleMapping.class)
-					.add(Restrictions.eq("userRoleMappingId.username", username))
-					.add(Restrictions.ge("rowstate", 1));
+					.add(Restrictions.eq("userRoleMappingId.user_id", roleid));
 			roleMappings= (ArrayList<UserRoleMapping>) crit.list();
 		} catch (Exception e) {
 			e.printStackTrace();

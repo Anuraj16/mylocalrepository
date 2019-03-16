@@ -79,7 +79,11 @@ private static final long serialVersionUID = 1L;
 	private double phone;
 	private int active;
 	@ManyToMany
-	@JoinTable(name = "userrolemapping", joinColumns ={ @JoinColumn(name = "user_id", referencedColumnName="id")}, inverseJoinColumns = @JoinColumn(name = "role_id"))
+	@JoinTable(name = "userrolemapping", 
+	joinColumns ={ 
+			@JoinColumn(name = "user_id", referencedColumnName="id")}, 
+			inverseJoinColumns = {
+					@JoinColumn(name = "role_id")})
 	private Set<UserRole> roles;
 	
 	private String firstName;

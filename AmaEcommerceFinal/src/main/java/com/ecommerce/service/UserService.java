@@ -8,4 +8,6 @@ import com.ecommerce.entity.Users;
 public interface UserService {
 
 	void save (Users user);
+	
+	Users validateUser(Users user);
 }

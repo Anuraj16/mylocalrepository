@@ -53,15 +53,22 @@ public class MainController {
 	}
 
 
-	@RequestMapping(value = {"/login"}, method = RequestMethod.GET)
-	public ModelAndView loginPage(@RequestParam(value = "logout", required = false) String logout ) {
-		ModelAndView model = new ModelAndView();
+	@RequestMapping(value = {"/login"}, method = RequestMethod.POST)
+	public ModelAndView loginPage(HttpServletRequest request, HttpServletResponse response,
+			  @ModelAttribute("user") Users user) {
 		System.out.println("entered /login");
-		if (logout != null) {
-			model.addObject("msg", "You've been logged out successfully.");
-		}
-		model.setViewName("loginPage");
-		return model;
+		
+		ModelAndView mav = null;
+		user = userService.validateUser(user);
+	    
+		 if (user !=null) {
+			    mav = new ModelAndView("index");
+			    mav.addObject("user", user);
+			    } else {
+			    mav = new ModelAndView("index");
+			    mav.addObject("message", "Username or Password is wrong!!");
+			    }
+			    return mav;
 	}
 
 

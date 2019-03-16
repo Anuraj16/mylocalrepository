@@ -4,25 +4,27 @@ import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
+import javax.persistence.Table;
 
 import com.ecommerce.compositeKey.UserRoleMappingId;
-/*@Entity
-@Table(name="userrolemapping")*/
+@Entity
+@Table(name="userrolemapping")
 public class UserRoleMapping {
 	
 	@EmbeddedId
 	@AttributeOverrides({
-	@AttributeOverride(name="urmroleid",column = @Column(name = "urmroleid", nullable = false)),
-	@AttributeOverride(name = "username", column = @Column(name = "urmusername", nullable = false))
+	@AttributeOverride(name="role_id",column = @Column(name = "role_id", nullable = false)),
+	@AttributeOverride(name = "user_id", column = @Column(name = "user_id", nullable = false))
 	})
 	private UserRoleMappingId userRoleMappingId;
 
 	
-	@Column(name = "urmid", nullable = false)
+	/*@Column(name = "user_id", nullable = false)
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	private int id;
+	private int id;*/
 	
 	//private int rowstate;
 	
@@ -30,9 +32,8 @@ public class UserRoleMapping {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public UserRoleMapping(UserRoleMappingId userRoleMappingId,int id) {
+	public UserRoleMapping(UserRoleMappingId userRoleMappingId) {
 		this.userRoleMappingId=userRoleMappingId;
-		this.id=id;
 	}
 	
 	public UserRoleMappingId getUserRoleMappingId() {
@@ -41,14 +42,6 @@ public class UserRoleMapping {
 
 	public void setUserRoleMappingId(UserRoleMappingId userRoleMappingId) {
 		this.userRoleMappingId = userRoleMappingId;
-	}
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
 	}
 
 	/*public int getRowstate() {

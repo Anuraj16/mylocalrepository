@@ -26,6 +26,7 @@ public class UserRole implements Serializable{
 	
 	private int role_id;
 	//private Users user;
+	@Column(name = "roleName", length = 30, nullable = false)
 	private String userRole;
 	private Long rowstate ;
 	private Set<Users> users;
@@ -56,7 +57,6 @@ public class UserRole implements Serializable{
 	this.user = user;
 	}*/
 
-	@Column(name = "roleName", length = 30, nullable = false)
 	public String getUserRole() {
 	return userRole;
 	}
