@@ -1,5 +1,6 @@
 package com.ecommerce.controller;
 
+import java.io.IOException;
 import java.security.Principal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -12,7 +13,10 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -20,10 +24,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.ecommerce.dao.UserInfoDAO;
+import com.ecommerce.entity.Products;
 import com.ecommerce.entity.UserRole;
 import com.ecommerce.entity.Users;
+import com.ecommerce.model.ProductInfo;
+import com.ecommerce.service.ProductDAO;
 import com.ecommerce.service.UserService;
 
 @Controller
@@ -37,6 +45,8 @@ public class MainController {
 	@Autowired
 	private UserService userService;
 
+	@Autowired
+	private ProductDAO productDAO;
 
 	@RequestMapping(value = {"/home" }, method = RequestMethod.GET)
 	public String homePage() {
@@ -138,6 +148,69 @@ public class MainController {
 	  return new ModelAndView("index", "firstname", user.getFirstName());
 	  }
 	
+	@RequestMapping(value = { "/product" }, method = RequestMethod.GET)
+    public ModelAndView product(Model model, @RequestParam(value = "code", defaultValue = "") String code) {
+		ModelAndView mav = new ModelAndView("product");
+        ProductInfo productInfo = null;
+ 
+        System.out.println("in /product get ");
+        if (code != null && code.length() > 0) {
+            productInfo = productDAO.findProductInfo(code);
+        }
+        if (productInfo == null) {
+            productInfo = new ProductInfo();
+            productInfo.setNewProduct(true);
+        }
+    	mav.addObject("productForm",productInfo);
+		 return mav;
+        
+    }
+ 
+    // POST: Save product
+    @RequestMapping(value = { "/product" }, method = RequestMethod.POST)
+    // Avoid UnexpectedRollbackException (See more explanations)
+   /* @Transactional(propagation = Propagation.NEVER)*/
+    public ModelAndView productSave(Model model, //
+            @ModelAttribute("productForm") @Validated ProductInfo productInfo, //
+            BindingResult result, //
+            final RedirectAttributes redirectAttributes) {
+ 
+    	 System.out.println("in /product post ");
+    	 ModelAndView mav = new ModelAndView("product");
+    	 System.out.println(productInfo.getProductName());
+    	// System.out.println(productInfo.getFileData().getOriginalFilename());
+        if (result.hasErrors()) {
+            return mav;
+        }
+        try {
+            productDAO.save(productInfo);
+        } catch (Exception e) {
+            // Need: Propagation.NEVER?
+            String message = e.getMessage();
+            mav.addObject("message", message);
+            // Show product form.
+            return mav;
+ 
+        }
+        return new ModelAndView("redirect:/productList");
+    }
+	
+    @RequestMapping(value = { "/productImage" }, method = RequestMethod.GET)
+    public void productImage(HttpServletRequest request, HttpServletResponse response, Model model,
+            @RequestParam("code") String code) throws IOException {
+    	 System.out.println("in /productImage get ");
+        Products product = null;
+        if (code != null) {
+            product = this.productDAO.findProduct(code);
+        }
+        if (product != null && product.getDestFilePath() != null) {
+            response.setContentType("image/jpeg, image/jpg, image/png, image/gif");
+         /*  TODO read the image from the destination file path and return*/
+           // response.getOutputStream().write(product.getImage());
+        }
+        response.getOutputStream().close();
+    }
+    
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm"); //yyyy-MM-dd'T'HH:mm:ssZ example

@@ -38,3 +38,9 @@ cursor:pointer;
 background:transparent;
 border:0;
 -webkit-appearance:none}
+
+.error-message {
+    font-size: 90%;
+    color: red;
+    font-style: italic;
+}

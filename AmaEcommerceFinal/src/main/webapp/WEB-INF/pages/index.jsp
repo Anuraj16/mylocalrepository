@@ -88,6 +88,9 @@
                 	<security:authorize  access="hasRole('ROLE_USER')">
                 	<li><a href="${pageContext.request.contextPath}/orders">Orders</a></li>
                 	</security:authorize>
+                	<security:authorize  access="hasRole('ROLE_ADMIN')">
+                	<li><a href="${pageContext.request.contextPath}/product">Create Product</a></li>
+                	</security:authorize>
                 	</c:when>
                 	<c:otherwise>
                 	<li>

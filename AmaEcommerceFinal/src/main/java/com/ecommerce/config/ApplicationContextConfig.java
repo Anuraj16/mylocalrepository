@@ -19,7 +19,9 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import com.ecommerce.dao.UserInfoDAO;
+import com.ecommerce.service.ProductDAO;
 import com.ecommerce.service.UserService;
+import com.ecommerce.serviceimpl.ProductDAOImpl;
 import com.ecommerce.serviceimpl.UserServiceImpl;
 
 @Configuration
@@ -45,7 +47,14 @@ public class ApplicationContextConfig {
 		return new UserServiceImpl();
 	}
 	
-
+	@Autowired
+	private ProductDAO productDAO;
+	
+	@Bean
+	public ProductDAO productDAO(){
+		return new ProductDAOImpl();
+	}
+	
 	@Bean
 	public ResourceBundleMessageSource messageSource() {
 		ResourceBundleMessageSource rb = new ResourceBundleMessageSource();
