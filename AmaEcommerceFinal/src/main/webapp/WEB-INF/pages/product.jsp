@@ -2,6 +2,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib uri="http://www.springframework.org/security/tags" prefix="security"%>
 <html>
 <head>
@@ -17,7 +18,7 @@
          ${errorMessage}
      </div>
    </c:if>
-<form:form class="form-horizontal" method="POST" modelAttribute="productForm" action="${pageContext.request.contextPath}/product" enctype="multipart/form-data">
+<form:form id="productFormID" class="form-horizontal" method="POST" modelAttribute="productForm" action="${pageContext.request.contextPath}/product" enctype="multipart/form-data">
   <fieldset>
     <div id="legend">
       <legend class="">Product</legend>
@@ -33,7 +34,7 @@
                        <form:input path="productCodeSku" name="productCodeSku" id="productCodeSku" class="input-xlarge"/>
                        <form:hidden path="newProduct" />
                   </c:if>
-        <form:errors path="productCodeSku" class="error-message" />
+         <form:errors path="productCodeSku" class="error-message" />
       </div>
     </div>
  
@@ -41,8 +42,7 @@
       <form:label path="productName" class="control-label">Name </form:label>
       <div class="controls">
          <form:input path="productName"  name="productName" id="productName" class="input-xlarge"/>
-                       <form:hidden path="newProduct" />
-         <form:errors path="productName" class="error-message" />
+      	 <form:errors path="productName" class="error-message" />
       </div>
     </div>
  
@@ -50,7 +50,7 @@
        <form:label path="unitPrice" class="control-label">Price </form:label>
       <div class="controls">
        <form:input path="unitPrice"  name="unitPrice" id="unitPrice" class="input-xlarge"/>
-       <form:errors path="unitPrice" class="error-message" />
+        <form:errors path="unitPrice" class="error-message" />
       </div>
     </div>
  

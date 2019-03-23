@@ -191,10 +191,11 @@ public class MainController {
     @RequestMapping(value = { "/product" }, method = RequestMethod.POST)
     // Avoid UnexpectedRollbackException (See more explanations)
    /* @Transactional(propagation = Propagation.NEVER)*/
-    public ModelAndView productSave(Model model, //
-            @ModelAttribute("productForm") @Validated ProductInfo productInfo, //
-            BindingResult result, //
-            final RedirectAttributes redirectAttributes) {
+    public ModelAndView productSave(HttpServletRequest request, HttpServletResponse response, //
+            @ModelAttribute("productForm") @Validated ProductInfo productInfo,
+            RedirectAttributes redirectAttributes,//
+            BindingResult result //
+            ) {
  
     	 System.out.println("in /product post ");
     	 ModelAndView mav = new ModelAndView("product");

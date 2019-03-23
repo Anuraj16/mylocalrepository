@@ -10,6 +10,9 @@ import javax.persistence.Lob;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
+
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 @Entity
 @Table(name="Products")
@@ -38,6 +41,12 @@ public class Products {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date dateCreated;
 	
+	 @Transient
+	 private boolean newProduct=false;
+	  
+	    // Upload file.
+	 @Transient
+	 private CommonsMultipartFile fileData;
 	
 	public long getProductId() {
 		return productId;
@@ -141,6 +150,18 @@ public class Products {
 	}
 	public void setDateCreated(Date dateCreated) {
 		this.dateCreated = dateCreated;
+	}
+	public boolean isNewProduct() {
+		return newProduct;
+	}
+	public void setNewProduct(boolean newProduct) {
+		this.newProduct = newProduct;
+	}
+	public CommonsMultipartFile getFileData() {
+		return fileData;
+	}
+	public void setFileData(CommonsMultipartFile fileData) {
+		this.fileData = fileData;
 	}
 	
 
