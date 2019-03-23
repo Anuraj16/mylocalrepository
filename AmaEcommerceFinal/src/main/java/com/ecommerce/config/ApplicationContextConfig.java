@@ -16,6 +16,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.orm.hibernate4.HibernateTransactionManager;
 import org.springframework.orm.hibernate4.LocalSessionFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import com.ecommerce.dao.UserInfoDAO;
@@ -114,6 +115,16 @@ public class ApplicationContextConfig {
 		}
 
 	}
+	
+	 @Bean(name = "multipartResolver")
+	    public CommonsMultipartResolver multipartResolver() {
+	        CommonsMultipartResolver commonsMultipartResolver = new CommonsMultipartResolver();
+	         
+	        // Set Max Size...
+	        // commonsMultipartResolver.setMaxUploadSize(...);
+	         
+	        return commonsMultipartResolver;
+	    }
 
 	// Hibernate Transaction Manager
 	@Autowired

@@ -2,6 +2,8 @@ package com.ecommerce.model;
 
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
+import com.ecommerce.entity.Products;
+
 public class ProductInfo {
 
 	private String productCodeSku;
@@ -12,6 +14,27 @@ public class ProductInfo {
  
     // Upload file.
     private CommonsMultipartFile fileData;
+    
+    public ProductInfo() {
+
+    }
+    
+    public ProductInfo(Products products) {
+    	this.productCodeSku = products.getProductCodeSku();
+    	this.productName = products.getProductName();
+    	this.unitPrice = products.getUnitPrice();
+    	this.newProduct = products.isNewProduct();
+    	this.fileData = products.getFileData();
+    	
+    }
+    
+    public ProductInfo(String productCodeSku,String productName,double unitPrice,boolean newProduct,CommonsMultipartFile fileData) {
+    	this.productCodeSku = productCodeSku;
+    	this.productName = productName;
+    	this.unitPrice = unitPrice;
+    	this.newProduct = newProduct;
+    	this.fileData = fileData;
+    }
 
 	public String getProductCodeSku() {
 		return productCodeSku;

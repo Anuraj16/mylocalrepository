@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.support.ByteArrayMultipartFileEditor;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -180,6 +181,7 @@ public class MainController {
         }
         if (productInfo == null) {
             productInfo = new ProductInfo();
+            productInfo.setProductName("Mo");
             productInfo.setNewProduct(true);
         }
     	mav.addObject("productForm",productInfo);
@@ -191,30 +193,29 @@ public class MainController {
     @RequestMapping(value = { "/product" }, method = RequestMethod.POST)
     // Avoid UnexpectedRollbackException (See more explanations)
    /* @Transactional(propagation = Propagation.NEVER)*/
-    public ModelAndView productSave(HttpServletRequest request, HttpServletResponse response, //
-            @ModelAttribute("productForm") @Validated ProductInfo productInfo,
-            RedirectAttributes redirectAttributes,//
-            BindingResult result //
+    public String productSave(Model model,
+            @ModelAttribute("productForm")  ProductInfo productForm,
+            RedirectAttributes redirectAttributes,
+            BindingResult result 
             ) {
  
     	 System.out.println("in /product post ");
-    	 ModelAndView mav = new ModelAndView("product");
-    	 System.out.println(productInfo.getProductName());
+    	 System.out.println(productForm.getProductName());
     	// System.out.println(productInfo.getFileData().getOriginalFilename());
         if (result.hasErrors()) {
-            return mav;
+        	return "product";
         }
         try {
-            productDAO.save(productInfo);
+            productDAO.save(productForm);
         } catch (Exception e) {
             // Need: Propagation.NEVER?
             String message = e.getMessage();
-            mav.addObject("message", message);
+            model.addAttribute("message", message);
             // Show product form.
-            return mav;
+            return "product";
  
         }
-        return new ModelAndView("redirect:/productList");
+        return "redirect:/productList";
     }
 	
     @RequestMapping(value = { "/productImage" }, method = RequestMethod.GET)
@@ -238,6 +239,15 @@ public class MainController {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm"); //yyyy-MM-dd'T'HH:mm:ssZ example
 		dateFormat.setLenient(false);
 		binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
+		
+		Object target = binder.getTarget();
+		 if (target == null) {
+	            return;
+	      }
+		 if (target.getClass() == ProductInfo.class) {
+	            // For upload Image.
+	            binder.registerCustomEditor(byte[].class, new ByteArrayMultipartFileEditor());
+	        }
 	}
 
 

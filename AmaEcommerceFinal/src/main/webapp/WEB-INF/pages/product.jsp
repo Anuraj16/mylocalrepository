@@ -26,7 +26,7 @@
     <div class="control-group">
       <form:label path="productCodeSku" class="control-label">Code </form:label>
       <div class="controls">
-       <c:if test="${not empty productForm.productCodeSku}">
+       			  <c:if test="${not empty productForm.productCodeSku}">
                        <form:hidden path="productCodeSku"/>
                        ${productForm.productCodeSku}
                   </c:if>
