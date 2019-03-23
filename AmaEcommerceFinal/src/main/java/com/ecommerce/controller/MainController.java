@@ -181,7 +181,6 @@ public class MainController {
         }
         if (productInfo == null) {
             productInfo = new ProductInfo();
-            productInfo.setProductName("Mo");
             productInfo.setNewProduct(true);
         }
     	mav.addObject("productForm",productInfo);
