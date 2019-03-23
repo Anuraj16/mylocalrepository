@@ -2,6 +2,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib uri="http://www.springframework.org/security/tags" prefix="security"%>
 <html lang="en">
 
@@ -340,6 +341,8 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
         </div>
         <div class="modal-body" style="padding:40px 50px;">
         <h6 id="loginErrorMessage" style="color:red; display:none;">Invalid Credentials</h6>
+        <h6 id="signUpSuccessMessage" style="color:green; display:none;"></h6>
+        
            <form:form id="signInForm" method="POST" modelAttribute="user"
            action="${pageContext.request.contextPath}/j_spring_security_check">
             <div class="form-group">
@@ -381,68 +384,56 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
           <button type="button" class="close" data-dismiss="modal">&times;</button>
         </div>
         <div class="modal-body" style="padding:40px 50px;">
-          <!-- <form role="form" action="LoginUser" name="Customers" method="post"> -->
-          <%-- <form method="POST"
-           action="${pageContext.request.contextPath}/j_spring_security_check"> --%>
+         	<h6 id="signUpErrorMessage" style="color:red; display:none;"></h6>
            <form:form id="signUpform" method="POST" modelAttribute="user"
            action="${pageContext.request.contextPath}/createUser">
             <div class="form-group">
-             <!--  <label for="usrname"><span class="glyphicon glyphicon-user"></span> Username</label> -->
-              <form:label path="username"><span class="glyphicon glyphicon-user"></span>Username</form:label>
-              <!-- <input type="text" class="form-control" name="username" placeholder="Enter email"> -->
+          
+              <form:label path="username">Username <span style="color:red;">*</span></form:label>
+             
               <form:input path="username" class="form-control" name="username" id="username" />
             </div>
             <div class="form-group">
-              <!-- <label for="psw"><span class="glyphicon glyphicon-eye-open"></span> Password</label> -->
-               <form:label path="password"><span class="glyphicon glyphicon-eye-open"></span> Password</form:label>
-             <!--  <input type="text" class="form-control" name="password" placeholder="Enter password"> -->
+          
+               <form:label path="password">Password <span style="color:red;">*</span></form:label>
+            
               <form:password path="password" class="form-control" name="password" id="password" />
             </div>
-           <!--  <div class="checkbox">
-              <label><input type="checkbox" value="" checked>Remember me</label>
-            </div> -->
-            
-            
-            
+
             <div class="form-group">
-              <!-- <label for="psw"><span class="glyphicon glyphicon-eye-open"></span> Password</label> -->
-               <form:label path="firstName"><span class="glyphicon glyphicon-eye-open"></span> First Name</form:label>
-             <!--  <input type="text" class="form-control" name="password" placeholder="Enter password"> -->
+              
+               <form:label path="firstName">First Name <span style="color:red;">*</span></form:label>
+      
               <form:input path="firstName" class="form-control" name="firstName" id="firstName" />
             </div>
             <div class="form-group">
-              <!-- <label for="psw"><span class="glyphicon glyphicon-eye-open"></span> Password</label> -->
-               <form:label path="lastName"><span class="glyphicon glyphicon-eye-open"></span> Last Name</form:label>
-             <!--  <input type="text" class="form-control" name="password" placeholder="Enter password"> -->
+              
+               <form:label path="lastName">Last Name <span style="color:red;">*</span></form:label>
+             
               <form:input path="lastName" class="form-control" name="lastName" id="lastName" />
             </div>
             <div class="form-group">
-              <!-- <label for="psw"><span class="glyphicon glyphicon-eye-open"></span> Password</label> -->
-               <form:label path="emailId"><span class="glyphicon glyphicon-eye-open"></span> Email</form:label>
-             <!--  <input type="text" class="form-control" name="password" placeholder="Enter password"> -->
+              
+               <form:label path="emailId">Email <span style="color:red;">*</span></form:label>
+            
               <form:input path="emailId" class="form-control" name="emailId" id="emailId" />
             </div>
             
             <div class="form-group">
-              <!-- <label for="psw"><span class="glyphicon glyphicon-eye-open"></span> Password</label> -->
-               <form:label path="phone"><span class="glyphicon glyphicon-eye-open"></span> Phone</form:label>
-             <!--  <input type="text" class="form-control" name="password" placeholder="Enter password"> -->
+             
+               <form:label path="phone">Phone</form:label>
+          
               <form:input path="phone" class="form-control" name="phone" id="phone" />
             </div>
             
-              <!-- <button type="submit" class="btn btn-success btn-block"><span class="glyphicon glyphicon-off"></span> Login</button> -->
+            
               <form:button id="register" name="register" class="btn btn-success btn-block"><span class="glyphicon glyphicon-off"></span>Register</form:button>
               </form:form>
-          <%-- </form> --%>
+         
         </div>
         <div class="modal-footer">
           <button type="submit" class="btn btn-danger btn-default pull-left" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Cancel</button>
-         <!--  <p>Not a member? 
-          	<a href="#" onClick="$('#loginbox').hide(); $('#signupbox').show()">
-                                            Sign Up Here
-                                        </a>
-          </p>
-          <p>Forgot <a href="#">Password?</a></p> -->
+         
         </div>
       </div>
       
@@ -460,14 +451,41 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
     <script src="script/plugins.js"></script>
     <!-- Active js -->
     <script src="script/active.js"></script>
-
+    
+<!-- login error -->
 <c:if test="${param.error != null}">
     <script> 
     $(window).on('load',function(){
         $('#myModal').modal('show');
+        $('#signUpSuccessMessage').hide(); 	
         $('#loginErrorMessage').show(); 	
     });
-    	
+    </script>
+</c:if>
+
+<!-- user creation error -->
+<c:if test="${not empty regError}">
+    <script> 
+    $(window).on('load',function(){
+    	var error = "${regError}";
+        $('#myModal').modal('show');
+        $('#loginModalId').hide(); $('#signupModalId').show();
+        $('#signUpErrorMessage').text(error);
+        $('#signUpErrorMessage').show(); 	
+    });
+    </script>
+</c:if>
+<!-- user created successfully -->
+<c:if test="${not empty regSuccess}">
+    <script> 
+    $(window).on('load',function(){
+    	var error = "${regSuccess}";
+        $('#myModal').modal('show');
+        $('#signupModalId').hide(); $('#loginModalId').show(); 
+        $('#signUpSuccessMessage').text(error);
+        $('#loginErrorMessage').hide(); 	
+        $('#signUpSuccessMessage').show(); 	
+    });
     </script>
 </c:if>
 </body>

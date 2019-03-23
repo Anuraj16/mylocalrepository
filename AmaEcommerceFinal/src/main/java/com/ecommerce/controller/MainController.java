@@ -55,11 +55,20 @@ public class MainController {
 	}
 
 	@RequestMapping(value = {"/" , "/index" }, method = RequestMethod.GET)
-	public ModelAndView welcomePage() {
+	public ModelAndView welcomePage( @ModelAttribute("user") Users user, @ModelAttribute("regError") String regError,@ModelAttribute("regSuccess") String regSuccess) {
 		System.out.println("entered /index ");
-		 ModelAndView mav = new ModelAndView("index");
-		mav.addObject("user",new Users());
-		 return mav;
+		ModelAndView mav = new ModelAndView("index");
+
+		if(user==null) {
+			user = new Users();
+		}
+		System.out.println("User "+user.getFirstName());
+		mav.addObject("user",user);
+		System.out.println("regerror "+regError);
+		mav.addObject("regError", regError);
+		System.out.println("regSuccess "+regSuccess);
+		mav.addObject("regSuccess", regSuccess);
+		return mav;
 	}
 
 
@@ -132,8 +141,19 @@ public class MainController {
 	
 	@RequestMapping(value = "/createUser", method = RequestMethod.POST)
 	  public ModelAndView addUser(HttpServletRequest request, HttpServletResponse response,
-	  @ModelAttribute("user") Users user) {
+	  @ModelAttribute("user") Users user,RedirectAttributes ra ,  BindingResult result) {
 	  //userService.register(user);
+		
+		if(user.getEmailId()==null || user.getEmailId().isEmpty() || 
+				user.getFirstName()==null || user.getFirstName().isEmpty() || 
+				user.getLastName()==null || user.getLastName().isEmpty() ||
+				user.getPassword()==null || user.getPassword().isEmpty()  ||
+				user.getUsername()==null || user.getUsername().isEmpty() ) {
+			System.out.println("Mandatory fiel dis empty");
+			ra.addFlashAttribute("regError", "Please fill all mandatory fields");
+			return new ModelAndView("redirect:/index");
+		}
+		
 		System.out.println("first name "+user.getFirstName());
 		user.setActive(1);
 		
@@ -145,7 +165,8 @@ public class MainController {
 		user.setRoles(roleSet);
 		//userServiceimpl.save(user);
 		userService.save(user);
-	  return new ModelAndView("index", "firstname", user.getFirstName());
+		ra.addFlashAttribute("regSuccess", user.getUsername()+ " registered Successfully. Please login to continue");
+		return new ModelAndView("redirect:/index");
 	  }
 	
 	@RequestMapping(value = { "/product" }, method = RequestMethod.GET)
