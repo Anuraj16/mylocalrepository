@@ -3,6 +3,7 @@ package com.ecommerce.serviceimpl;
 import java.util.Date;
 
 import org.hibernate.Criteria;
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
@@ -18,7 +19,12 @@ public class ProductDAOImpl implements ProductDAO {
 	private SessionFactory sessionFactory;
 	
 	public Products findProduct(String code) {
-		 Session session = sessionFactory.getCurrentSession();
+		 Session session;
+		 try {
+			    session = sessionFactory.getCurrentSession();
+			} catch (HibernateException e) {
+			    session = sessionFactory.openSession();
+			}
 	        Criteria crit = session.createCriteria(Products.class);
 	        crit.add(Restrictions.eq("productCodeSku", code));
 	        return (Products) crit.uniqueResult();
@@ -56,7 +62,6 @@ public class ProductDAOImpl implements ProductDAO {
 	        if (isNew) {
 	            this.sessionFactory.getCurrentSession().persist(product);
 	        }
-	        this.sessionFactory.getCurrentSession().flush();
 
 	}
 

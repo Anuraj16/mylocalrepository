@@ -34,6 +34,7 @@ import com.ecommerce.entity.Users;
 import com.ecommerce.model.ProductInfo;
 import com.ecommerce.service.ProductDAO;
 import com.ecommerce.service.UserService;
+import com.ecommerce.validator.ProductInfoValidator;
 
 @Controller
 @Transactional
@@ -48,6 +49,9 @@ public class MainController {
 
 	@Autowired
 	private ProductDAO productDAO;
+	
+	@Autowired
+    private ProductInfoValidator productInfoValidator;
 
 	@RequestMapping(value = {"/home" }, method = RequestMethod.GET)
 	public String homePage() {
@@ -193,8 +197,7 @@ public class MainController {
     // Avoid UnexpectedRollbackException (See more explanations)
    /* @Transactional(propagation = Propagation.NEVER)*/
     public String productSave(Model model,
-            @ModelAttribute("productForm")  ProductInfo productForm,
-            RedirectAttributes redirectAttributes,
+            @ModelAttribute("productForm")  @Validated ProductInfo productForm,
             BindingResult result 
             ) {
  
@@ -202,6 +205,7 @@ public class MainController {
     	 System.out.println(productForm.getProductName());
     	// System.out.println(productInfo.getFileData().getOriginalFilename());
         if (result.hasErrors()) {
+        	System.out.println("Product has errors");
         	return "product";
         }
         try {
@@ -245,6 +249,8 @@ public class MainController {
 	      }
 		 if (target.getClass() == ProductInfo.class) {
 	            // For upload Image.
+			 System.out.println("Product info binded");
+			    binder.setValidator(productInfoValidator);
 	            binder.registerCustomEditor(byte[].class, new ByteArrayMultipartFileEditor());
 	        }
 	}
