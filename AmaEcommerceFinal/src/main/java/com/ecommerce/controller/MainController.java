@@ -1,10 +1,13 @@
 package com.ecommerce.controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.security.Principal;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -13,7 +16,6 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -23,6 +25,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.multipart.support.ByteArrayMultipartFileEditor;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -32,6 +35,7 @@ import com.ecommerce.entity.Products;
 import com.ecommerce.entity.UserRole;
 import com.ecommerce.entity.Users;
 import com.ecommerce.model.ProductInfo;
+import com.ecommerce.model.UserInfo;
 import com.ecommerce.service.ProductDAO;
 import com.ecommerce.service.UserService;
 import com.ecommerce.validator.ProductInfoValidator;
@@ -60,13 +64,26 @@ public class MainController {
 	}
 
 	@RequestMapping(value = {"/" , "/index" }, method = RequestMethod.GET)
-	public ModelAndView welcomePage( @ModelAttribute("user") Users user, @ModelAttribute("regError") String regError,@ModelAttribute("regSuccess") String regSuccess) {
+	public ModelAndView welcomePage( @ModelAttribute("user") UserInfo user, @ModelAttribute("regError") String regError,@ModelAttribute("regSuccess") String regSuccess) {
 		System.out.println("entered /index ");
 		ModelAndView mav = new ModelAndView("index");
 
 		if(user==null) {
-			user = new Users();
+			user = new UserInfo();
 		}
+		List<Products> productList=productDAO.findAllProducts();
+		List<ProductInfo> productinfoList = new ArrayList<ProductInfo>();;
+		ProductInfo productInfo=null;
+		for (Products products : productList) {
+			productInfo= new ProductInfo();
+			productInfo.setProductCodeSku(products.getProductCodeSku());
+			productInfo.setProductDescription(products.getProductDescription());
+			productInfo.setProductName(products.getProductName());
+			productInfo.setUnitPrice(products.getUnitPrice());
+			productInfo.setImageUrl(getImageForProduct(products.getDestFilePath()));
+			productinfoList.add(productInfo);
+		}
+		user.setProductinfoList(productinfoList);
 		System.out.println("User "+user.getFirstName());
 		mav.addObject("user",user);
 		System.out.println("regerror "+regError);
@@ -75,14 +92,16 @@ public class MainController {
 		mav.addObject("regSuccess", regSuccess);
 		return mav;
 	}
-
-
+	
 	@RequestMapping(value = {"/login"}, method = RequestMethod.POST)
 	public ModelAndView loginPage(HttpServletRequest request, HttpServletResponse response,
-			  @ModelAttribute("user") Users user) {
+			  @ModelAttribute("user") UserInfo userInfo) {
 		System.out.println("entered /login");
 		
 		ModelAndView mav = null;
+		Users user= new Users();
+		user.setUsername(userInfo.getUsername());
+		user.setPassword(userInfo.getPassword());
 		user = userService.validateUser(user);
 	    
 		 if (user !=null) {
@@ -146,20 +165,27 @@ public class MainController {
 	
 	@RequestMapping(value = "/createUser", method = RequestMethod.POST)
 	  public ModelAndView addUser(HttpServletRequest request, HttpServletResponse response,
-	  @ModelAttribute("user") Users user,RedirectAttributes ra ,  BindingResult result) {
+	  @ModelAttribute("user") UserInfo userInfo,RedirectAttributes ra ,  BindingResult result) {
 	  //userService.register(user);
 		
-		if(user.getEmailId()==null || user.getEmailId().isEmpty() || 
-				user.getFirstName()==null || user.getFirstName().isEmpty() || 
-				user.getLastName()==null || user.getLastName().isEmpty() ||
-				user.getPassword()==null || user.getPassword().isEmpty()  ||
-				user.getUsername()==null || user.getUsername().isEmpty() ) {
+		if(userInfo.getEmailId()==null || userInfo.getEmailId().isEmpty() || 
+				userInfo.getFirstName()==null || userInfo.getFirstName().isEmpty() || 
+				userInfo.getLastName()==null || userInfo.getLastName().isEmpty() ||
+				userInfo.getPassword()==null || userInfo.getPassword().isEmpty()  ||
+				userInfo.getUsername()==null || userInfo.getUsername().isEmpty() ) {
 			System.out.println("Mandatory fiel dis empty");
 			ra.addFlashAttribute("regError", "Please fill all mandatory fields");
 			return new ModelAndView("redirect:/index");
 		}
 		
-		System.out.println("first name "+user.getFirstName());
+		System.out.println("first name "+userInfo.getFirstName());
+		Users user = new Users();
+		user.setUsername(userInfo.getUsername());
+		user.setFirstName(userInfo.getFirstName());
+		user.setLastName(userInfo.getLastName());
+		user.setPassword(userInfo.getPassword());
+		user.setEmailId(userInfo.getEmailId());
+		user.setPhone(userInfo.getPhone());
 		user.setActive(1);
 		
 		UserRole userrole = new UserRole();
@@ -203,12 +229,38 @@ public class MainController {
  
     	 System.out.println("in /product post ");
     	 System.out.println(productForm.getProductName());
+    	 System.out.println("no of uploaded files "+productForm.getFileData().size());
     	// System.out.println(productInfo.getFileData().getOriginalFilename());
         if (result.hasErrors()) {
         	System.out.println("Product has errors");
         	return "product";
         }
         try {
+        	 List<CommonsMultipartFile> files = productForm.getFileData();
+             List<String> fileNames = new ArrayList<String>();
+             File productImageDirectory= new File("E:/Product Images/"+productForm.getProductCodeSku());
+             if(!productImageDirectory.exists()){
+            	 productImageDirectory.mkdirs();
+             }
+             if (null != files && files.size() > 0)
+             {
+                 for (CommonsMultipartFile multipartFile : files) {
+      
+                     String fileName = multipartFile.getOriginalFilename();
+                     System.out.println("filename "+fileName);
+                     if(fileName !=null && fileName != "" ){
+                    	 fileNames.add(fileName);
+                         File imageFile = new File(productImageDirectory, fileName);
+                         try
+                         {
+                             multipartFile.transferTo(imageFile);
+                         } catch (IOException e)
+                         {
+                             e.printStackTrace();
+                         }
+                     }
+                 }
+             }
             productDAO.save(productForm);
         } catch (Exception e) {
             // Need: Propagation.NEVER?
@@ -220,7 +272,18 @@ public class MainController {
         }
         return "redirect:/productList";
     }
-	
+    @RequestMapping({ "/productList" })
+    public ModelAndView listProductHandler(Model model) {
+        ModelAndView mav = new ModelAndView("redirect:/index");
+        
+     // List<ProductInfo> productinfoList= productDAO.findAllProducts();
+      /*  PaginationResult<ProductInfo> result = productDAO.queryProducts(page, //
+                maxResult, maxNavigationPage, likeName);*/
+      //	System.out.println("productinfoList size "+productinfoList.size());
+       // mav.addObject("productinfoList", productinfoList);
+        return mav;
+    }
+    
     @RequestMapping(value = { "/productImage" }, method = RequestMethod.GET)
     public void productImage(HttpServletRequest request, HttpServletResponse response, Model model,
             @RequestParam("code") String code) throws IOException {
@@ -255,5 +318,11 @@ public class MainController {
 	        }
 	}
 
+
+	private String getImageForProduct(String destFilePath) {
+		File folder = new File(destFilePath);
+		File[] listOfFiles = folder.listFiles();
+		return listOfFiles[0].getName();
+	}
 
 }

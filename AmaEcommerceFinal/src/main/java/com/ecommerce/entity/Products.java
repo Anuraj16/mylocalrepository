@@ -41,12 +41,7 @@ public class Products {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date dateCreated;
 	
-	 @Transient
-	 private boolean newProduct=false;
-	  
-	    // Upload file.
-	 @Transient
-	 private CommonsMultipartFile fileData;
+	private int rowstate;
 	
 	public long getProductId() {
 		return productId;
@@ -151,17 +146,11 @@ public class Products {
 	public void setDateCreated(Date dateCreated) {
 		this.dateCreated = dateCreated;
 	}
-	public boolean isNewProduct() {
-		return newProduct;
+	public int getRowstate() {
+		return rowstate;
 	}
-	public void setNewProduct(boolean newProduct) {
-		this.newProduct = newProduct;
-	}
-	public CommonsMultipartFile getFileData() {
-		return fileData;
-	}
-	public void setFileData(CommonsMultipartFile fileData) {
-		this.fileData = fileData;
+	public void setRowstate(int rowstate) {
+		this.rowstate = rowstate;
 	}
 	
 

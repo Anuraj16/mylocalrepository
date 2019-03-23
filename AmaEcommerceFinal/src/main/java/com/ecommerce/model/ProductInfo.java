@@ -1,5 +1,7 @@
 package com.ecommerce.model;
 
+import java.util.List;
+
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import com.ecommerce.entity.Products;
@@ -13,8 +15,12 @@ public class ProductInfo {
     private boolean newProduct=false;
  
     // Upload file.
-    private CommonsMultipartFile fileData;
+   // private CommonsMultipartFile fileData;
+    private List<CommonsMultipartFile> fileData;
     
+    private String productDescription;
+    private String destFilePath;
+    private String imageUrl;
     public ProductInfo() {
 
     }
@@ -23,8 +29,8 @@ public class ProductInfo {
     	this.productCodeSku = products.getProductCodeSku();
     	this.productName = products.getProductName();
     	this.unitPrice = products.getUnitPrice();
-    	this.newProduct = products.isNewProduct();
-    	this.fileData = products.getFileData();
+    	//this.newProduct = products.isNewProduct();
+    	//this.fileData = products.getFileData();
     	
     }
     
@@ -33,7 +39,7 @@ public class ProductInfo {
     	this.productName = productName;
     	this.unitPrice = unitPrice;
     	this.newProduct = newProduct;
-    	this.fileData = fileData;
+    	//this.fileData = fileData;
     }
 
 	public String getProductCodeSku() {
@@ -68,11 +74,35 @@ public class ProductInfo {
 		this.newProduct = newProduct;
 	}
 
-	public CommonsMultipartFile getFileData() {
+	public List<CommonsMultipartFile> getFileData() {
 		return fileData;
 	}
 
-	public void setFileData(CommonsMultipartFile fileData) {
+	public void setFileData(List<CommonsMultipartFile> fileData) {
 		this.fileData = fileData;
+	}
+
+	public String getProductDescription() {
+		return productDescription;
+	}
+
+	public void setProductDescription(String productDescription) {
+		this.productDescription = productDescription;
+	}
+
+	public String getDestFilePath() {
+		return destFilePath;
+	}
+
+	public void setDestFilePath(String destFilePath) {
+		this.destFilePath = destFilePath;
+	}
+
+	public String getImageUrl() {
+		return imageUrl;
+	}
+
+	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
 	}
 }

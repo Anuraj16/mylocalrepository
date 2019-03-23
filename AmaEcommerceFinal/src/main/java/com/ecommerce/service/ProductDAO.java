@@ -1,5 +1,7 @@
 package com.ecommerce.service;
 
+import java.util.List;
+
 import com.ecommerce.entity.Products;
 import com.ecommerce.model.ProductInfo;
 
@@ -17,4 +19,6 @@ public Products findProduct(String code);
                        int maxNavigationPage, String likeName);*/
  
     public void save(ProductInfo productInfo);
+    
+    public List<Products> findAllProducts();
 }

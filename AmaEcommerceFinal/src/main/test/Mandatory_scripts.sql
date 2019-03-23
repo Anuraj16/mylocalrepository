@@ -10,14 +10,14 @@ CREATE TABLE `users` (
   `active` int(11) DEFAULT NULL,
   CONSTRAINT UNIQUE_USERNAME_EMAIL UNIQUE (`username`,`emailId`),
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `userrole` (
   `role_id` int(11) NOT NULL AUTO_INCREMENT,
   `roleName` varchar(45) DEFAULT NULL,
   `rowstate` bigint(100) DEFAULT NULL,
   PRIMARY KEY (`role_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `userrolemapping`;
 CREATE TABLE `userrolemapping` (
@@ -48,6 +48,7 @@ CREATE TABLE `products` (
   `unitsInStock` int(11) default NULL,
   `destFilePath` nvarchar(2000) DEFAULT NULL,
   `dateCreated` datetime NOT NULL,
+  `rowstate` int(11) default NULL,
   CONSTRAINT UNIQUE_PRODUCT_CODE UNIQUE (`productCodeSku`),
   PRIMARY KEY (`productId`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;

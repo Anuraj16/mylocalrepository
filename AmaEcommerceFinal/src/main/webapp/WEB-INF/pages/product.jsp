@@ -46,6 +46,14 @@
       	 <form:errors path="productName" class="error-message" />
       </div>
     </div>
+    
+     <div class="control-group">
+      <form:label path="productName" class="control-label">Product Description: </form:label>
+      <div class="controls">
+         <form:textarea path="productDescription"  name="productDescription" id="productDescription" class="input-xlarge"/>
+      	 <form:errors path="productDescription" class="error-message" />
+      </div>
+    </div>
  
     <div class="control-group">
        <form:label path="unitPrice" class="control-label">Price </form:label>
@@ -65,7 +73,12 @@
      <div class="control-group">
       <form:label path="fileData" class="control-label">Upload Image </form:label>
       <div class="controls">
-        <form:input type="file" path="fileData" />
+        <%-- <form:input type="file" path="fileData" /> --%>
+        <input type="file" name="fileData" multiple/>
+        <br></br>
+        <input type="file" name="fileData" multiple/>
+         <br></br>
+        <input type="file" name="fileData" multiple/>
       </div>
     </div>
  

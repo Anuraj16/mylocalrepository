@@ -1,6 +1,7 @@
 package com.ecommerce.serviceimpl;
 
 import java.util.Date;
+import java.util.List;
 
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
@@ -48,21 +49,30 @@ public class ProductDAOImpl implements ProductDAO {
 	            isNew = true;
 	            product = new Products();
 	            product.setDateCreated(new Date());
+	            product.setRowstate(1);
 	        }
 	        product.setProductCodeSku(code);
 	        product.setProductName(productInfo.getProductName());
 	        product.setUnitPrice(productInfo.getUnitPrice());
+	        product.setProductDescription(productInfo.getProductDescription());
+	        product.setDestFilePath("E:/Product Images/"+productInfo.getProductCodeSku());
 	 
-	        if (productInfo.getFileData() != null) {
-	            /*byte[] image = productInfo.getFileData().getBytes();
-	            if (image != null && image.length > 0) {
-	                product.setImage(image);
-	            }*/
-	        }
 	        if (isNew) {
 	            this.sessionFactory.getCurrentSession().persist(product);
 	        }
 
+	}
+
+	public List<Products> findAllProducts() {
+		 Session session;
+		 try {
+			    session = sessionFactory.getCurrentSession();
+			} catch (HibernateException e) {
+			    session = sessionFactory.openSession();
+			}
+	        Criteria crit = session.createCriteria(Products.class);
+	        crit.add(Restrictions.ne("rowstate", -1));
+	        return ( List<Products>) crit.list();
 	}
 
 }
