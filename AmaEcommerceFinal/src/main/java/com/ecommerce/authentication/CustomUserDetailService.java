@@ -35,6 +35,7 @@ public class CustomUserDetailService implements UserDetailsService{
 		if (userInfo == null) {
 			throw new UsernameNotFoundException("User " + username + " was not found in the database");
 		}*/
+		System.out.println("WTF "+username);
 		System.out.println("username "+username);
 		Users user = userInfoDAO.findUserInfo(username);
 		System.out.println("UserInfo= " + user.getId());
