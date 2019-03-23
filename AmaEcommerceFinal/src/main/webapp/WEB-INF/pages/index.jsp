@@ -25,7 +25,7 @@
     <link rel="stylesheet" href="styles/additionalStyles.css">
     <!--bootstrap css inclusion  -->
     <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css"> -->
-    
+    <fmt:setBundle basename="validator" />
 
 </head>
 
@@ -83,7 +83,7 @@
                 	</li> -->
                 	<c:choose>
                 	<c:when test="${pageContext.request.userPrincipal.name != null}">
-                	<li><span>Welcome ${pageContext.request.userPrincipal.name}</span></li>
+                	<li><span style="color:#131212;font-size:14px;">Welcome ${pageContext.request.userPrincipal.name}</span></li>
                 	<li><a href="${pageContext.request.contextPath}/logout">Logout</a></li>
                 	<security:authorize  access="hasRole('ROLE_USER')">
                 	<li><a href="${pageContext.request.contextPath}/orders">Orders</a></li>
@@ -332,13 +332,14 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
     <div class="modal fade" id="myModal" role="dialog" style="opacity:1.5 !important">
     <div class="modal-dialog">
     
-      <!-- Modal content-->
+      <!-- Login Modal content-->
       <div class="modal-content" id="loginModalId">
         <div class="modal-header" style="padding:35px 50px;">
         <h4><span class="glyphicon glyphicon-lock"></span> Login</h4>
           <button type="button" class="close" data-dismiss="modal">&times;</button>
         </div>
         <div class="modal-body" style="padding:40px 50px;">
+        <h6 id="loginErrorMessage" style="color:red; display:none;">Invalid Credentials</h6>
            <form:form id="signInForm" method="POST" modelAttribute="user"
            action="${pageContext.request.contextPath}/j_spring_security_check">
             <div class="form-group">
@@ -370,7 +371,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
           <p>Forgot <a href="#">Password?</a></p>
         </div>
       </div>
-      
+      <!-- login modal ends -->
       
       <!-- signup window starts -->
       
@@ -460,6 +461,15 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
     <!-- Active js -->
     <script src="script/active.js"></script>
 
+<c:if test="${param.error != null}">
+    <script> 
+    $(window).on('load',function(){
+        $('#myModal').modal('show');
+        $('#loginErrorMessage').show(); 	
+    });
+    	
+    </script>
+</c:if>
 </body>
 
 </html>
