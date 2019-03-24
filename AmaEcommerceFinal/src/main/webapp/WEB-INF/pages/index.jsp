@@ -131,7 +131,7 @@
         <div class="products-catagories-area clearfix">
             <div class="amado-pro-catagory clearfix">
 
-				<c:forEach items="${user.productinfoList}" var="prodInfo">
+				<c:forEach items="${productinfoList}" var="prodInfo">
 				<div class="single-products-catagory clearfix">
                     <a href="${pageContext.request.contextPath}/shop">
                         <img src="img/bg-img/1.jpg" alt="">
@@ -240,8 +240,8 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
         <h6 id="loginErrorMessage" style="color:red; display:none;">Invalid Credentials</h6>
         <h6 id="signUpSuccessMessage" style="color:green; display:none;"></h6>
         
-           <form:form id="signInForm" method="POST" modelAttribute="user"
-           action="${pageContext.request.contextPath}/j_spring_security_check">
+           <form:form id="signInForm" name="signInForm" method="POST" modelAttribute="user"
+           action="${pageContext.request.contextPath}/j_spring_security_check" onsubmit = "return(validate());">
             <div class="form-group">
                <form:label path="username"><span class="glyphicon glyphicon-user"></span>Username</form:label>
               <!-- <input type="text" class="form-control" name="username" placeholder="Enter email"> -->
@@ -376,15 +376,54 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 <c:if test="${not empty regSuccess}">
     <script> 
     $(window).on('load',function(){
-    	var error = "${regSuccess}";
+    	var success = "${regSuccess}";
         $('#myModal').modal('show');
         $('#signupModalId').hide(); $('#loginModalId').show(); 
-        $('#signUpSuccessMessage').text(error);
+        $('#signUpSuccessMessage').text(success);
         $('#loginErrorMessage').hide(); 	
         $('#signUpSuccessMessage').show(); 	
     });
     </script>
 </c:if>
+
+<!-- user created successfully -->
+<c:if test="${not empty showLogin}">
+    <script> 
+    $(window).on('load',function(){
+    	var msg = "${showLogin}";
+        $('#myModal').modal('show');
+        $('#signupModalId').hide(); $('#loginModalId').show(); 
+        $('#signUpSuccessMessage').text(msg);
+        $('#loginErrorMessage').hide(); 	
+        $('#signUpSuccessMessage').show(); 	
+    });
+    </script>
+</c:if>
+
+<script>
+	function validate(){
+		if( document.signInForm.username.value == "" && document.signInForm.password.value == "" ) {
+            document.signInForm.username.focus() ;
+            document.signInForm.password.focus() ;
+            $('#loginErrorMessage').text("Username and password required"); 
+            $('#loginErrorMessage').show(); 
+            return false;
+         }
+		if( document.signInForm.password.value == "" ) {
+            document.signInForm.password.focus() ;
+            $('#loginErrorMessage').text("Password required"); 
+            $('#loginErrorMessage').show(); 
+            return false;
+         }
+		if( document.signInForm.username.value == "" ) {
+            document.signInForm.username.focus() ;
+            $('#loginErrorMessage').text("Username required"); 
+            $('#loginErrorMessage').show(); 
+            return false;
+         }
+		return true;
+	}
+</script>
 </body>
 
 </html>

@@ -44,14 +44,14 @@ new CustomFilter(), BasicAuthenticationFilter.class);*/
 		http.headers().frameOptions().sameOrigin();
 
 		// The pages does not require login
-		http.authorizeRequests().antMatchers("/","/index","/login", "/logout").permitAll();
+		http.authorizeRequests().antMatchers("/","/index","/login", "/logout","/createUser").permitAll();
 
 		//below all pages require login
 		// user as well as admin pages
-		http.authorizeRequests().antMatchers("/home","/changePass","/savestatus","/delete-status-*","/edit-status-*").access("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')");
+		http.authorizeRequests().antMatchers("/home","/cart","/checkout").access("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')");
 
 		// admin only pages
-		http.authorizeRequests().antMatchers("/userInfo","/register","/empstatus","/saveUser","/edit-user-*","/delete-user-*").access("hasRole('ROLE_ADMIN')");
+		http.authorizeRequests().antMatchers("/product").access("hasRole('ROLE_ADMIN')");
 
 		//access denied page
 		http.authorizeRequests().and().exceptionHandling().accessDeniedPage("/403");

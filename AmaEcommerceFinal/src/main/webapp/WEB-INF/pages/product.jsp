@@ -10,8 +10,9 @@
 <title>Product</title>
 <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet" id="bootstrap-css">
 <link rel="stylesheet" href="styles/style.css">
-<script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
 <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+
 </head>
 <body>
 <c:if test="${not empty errorMessage }">
@@ -63,22 +64,20 @@
       </div>
     </div>
  
-    <div class="control-group">
+    <%-- <div class="control-group">
       <form:label path="fileData" class="control-label">Image </form:label> 
       <div class="controls">
          <img src="${pageContext.request.contextPath}/productImage?code=${productForm.productCodeSku}" width="100"/>
       </div>
-    </div>
+    </div> --%>
     
      <div class="control-group">
       <form:label path="fileData" class="control-label">Upload Image </form:label>
       <div class="controls">
+      <button id="addFiles">Choose Files</button>
+      <ul class="list"></ul>
         <%-- <form:input type="file" path="fileData" /> --%>
-        <input type="file" name="fileData" multiple/>
-        <br></br>
-        <input type="file" name="fileData" multiple/>
-         <br></br>
-        <input type="file" name="fileData" multiple/>
+        <!-- <input type="file" name="fileData" multiple="multiple"/> -->
       </div>
     </div>
  
@@ -90,6 +89,19 @@
     </div>
   </fieldset>
   </form:form>
-
+<script>
+$('#addFiles').click(function(e) {
+    e.preventDefault();
+    var nb_attachments = $('form input').length;
+    var $input = $('<input type="file" name=fileData>');
+    $input.on('change', function(evt) {
+        var f = evt.target.files[0];
+        $('form').append($(this));
+        $('ul.list').append('<li class="item">'+f.name+'('+f.size+')</li>');
+    });
+    $input.hide();
+    $input.trigger('click');
+});
+</script>
 </body>
 </html>

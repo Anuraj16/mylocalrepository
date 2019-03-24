@@ -11,7 +11,6 @@ private String firstName;
 private String lastName;
 private String emailId;
 private double phone;
-private List<ProductInfo> productinfoList;
 
 public UserInfo() {
 
@@ -76,12 +75,5 @@ public String getUsername() {
 public void setUsername(String username) {
 	this.username = username;
 }
-public List<ProductInfo> getProductinfoList() {
-	return productinfoList;
-}
-public void setProductinfoList(List<ProductInfo> productinfoList) {
-	this.productinfoList = productinfoList;
-}
-
 
 }

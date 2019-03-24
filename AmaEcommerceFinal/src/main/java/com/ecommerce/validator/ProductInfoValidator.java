@@ -27,6 +27,7 @@ public class ProductInfoValidator implements Validator{
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "productCodeSku", "NotEmpty.productForm.productCodeSku");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "productName", "NotEmpty.productForm.productName");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "unitPrice", "NotEmpty.productForm.unitPrice");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "productDescription", "NotEmpty.productForm.productDescription");
  
         if(productInfo.getUnitPrice()<=0.0) {
         	errors.rejectValue("unitPrice", "NotEmpty.productForm.unitPrice");
