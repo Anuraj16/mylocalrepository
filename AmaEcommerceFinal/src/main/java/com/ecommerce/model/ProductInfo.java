@@ -21,6 +21,8 @@ public class ProductInfo {
     private String productDescription;
     private String destFilePath;
     private String imageUrl;
+    private List<String> imageUrlList;
+    private int qty;
     public ProductInfo() {
 
     }
@@ -29,6 +31,8 @@ public class ProductInfo {
     	this.productCodeSku = products.getProductCodeSku();
     	this.productName = products.getProductName();
     	this.unitPrice = products.getUnitPrice();
+    	this.destFilePath= products.getDestFilePath();
+    	this.productDescription=products.getProductDescription();
     	//this.newProduct = products.isNewProduct();
     	//this.fileData = products.getFileData();
     	
@@ -105,4 +109,22 @@ public class ProductInfo {
 	public void setImageUrl(String imageUrl) {
 		this.imageUrl = imageUrl;
 	}
+
+	public List<String> getImageUrlList() {
+		return imageUrlList;
+	}
+
+	public void setImageUrlList(List<String> imageUrlList) {
+		this.imageUrlList = imageUrlList;
+	}
+
+	public int getQty() {
+		return qty;
+	}
+
+	public void setQty(int qty) {
+		this.qty = qty;
+	}
+
+	
 }

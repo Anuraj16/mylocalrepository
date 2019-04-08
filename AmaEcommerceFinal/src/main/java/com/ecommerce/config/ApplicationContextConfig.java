@@ -20,8 +20,10 @@ import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import com.ecommerce.dao.UserInfoDAO;
+import com.ecommerce.service.OrderDAO;
 import com.ecommerce.service.ProductDAO;
 import com.ecommerce.service.UserService;
+import com.ecommerce.serviceimpl.OrderDAOImpl;
 import com.ecommerce.serviceimpl.ProductDAOImpl;
 import com.ecommerce.serviceimpl.UserServiceImpl;
 
@@ -54,6 +56,14 @@ public class ApplicationContextConfig {
 	@Bean
 	public ProductDAO productDAO(){
 		return new ProductDAOImpl();
+	}
+	
+	@Autowired
+	private OrderDAO orderDAO;
+	
+	@Bean
+	public OrderDAO orderDAO(){
+		return new OrderDAOImpl();
 	}
 	
 	@Bean

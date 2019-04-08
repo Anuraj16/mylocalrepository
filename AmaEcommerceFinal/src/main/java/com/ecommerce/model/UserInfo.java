@@ -1,6 +1,5 @@
 package com.ecommerce.model;
 
-import java.util.List;
 
 public class UserInfo {
 
@@ -10,12 +9,19 @@ private Long ispassworddefault;
 private String firstName;
 private String lastName;
 private String emailId;
-private double phone;
+private String phone;
+private boolean valid;
+private String country;
+private String address;
+private String city;
+private String pinCode;
+private String[] UserType;
+
 
 public UserInfo() {
 
 }
-public UserInfo(String userName, String password,Long ispassworddefault,String firstName ,String lastName,String emailId,double phone){
+public UserInfo(String userName, String password,Long ispassworddefault,String firstName ,String lastName,String emailId,String phone){
 this.username = userName;
 this.password = password;
 this.ispassworddefault = ispassworddefault;
@@ -63,17 +69,53 @@ public String getEmailId() {
 public void setEmailId(String emailId) {
 	this.emailId = emailId;
 }
-public double getPhone() {
-	return phone;
-}
-public void setPhone(double phone) {
-	this.phone = phone;
-}
 public String getUsername() {
 	return username;
 }
 public void setUsername(String username) {
 	this.username = username;
+}
+public boolean isValid() {
+	return valid;
+}
+public void setValid(boolean valid) {
+	this.valid = valid;
+}
+public String getCountry() {
+	return country;
+}
+public void setCountry(String country) {
+	this.country = country;
+}
+public String getAddress() {
+	return address;
+}
+public void setAddress(String address) {
+	this.address = address;
+}
+public String getCity() {
+	return city;
+}
+public void setCity(String city) {
+	this.city = city;
+}
+public String getPinCode() {
+	return pinCode;
+}
+public void setPinCode(String pinCode) {
+	this.pinCode = pinCode;
+}
+public String getPhone() {
+	return phone;
+}
+public void setPhone(String phone) {
+	this.phone = phone;
+}
+public String[] getUserType() {
+	return UserType;
+}
+public void setUserType(String[] userType) {
+	UserType = userType;
 }
 
 }

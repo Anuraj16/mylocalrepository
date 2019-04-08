@@ -6,7 +6,7 @@ CREATE TABLE `users` (
   `lastName` varchar(255) DEFAULT NULL,
   `password` varchar(255) DEFAULT NULL,
   `emailId` varchar(255) NOT NULL,
-  `phone` bigint(13) DEFAULT NULL,
+  `phone` varchar(255) NOT NULL,
   `active` int(11) DEFAULT NULL,
   CONSTRAINT UNIQUE_USERNAME_EMAIL UNIQUE (`username`,`emailId`),
   PRIMARY KEY (`id`)

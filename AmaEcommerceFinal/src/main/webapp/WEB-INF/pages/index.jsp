@@ -100,10 +100,8 @@
                 	</c:otherwise>
                 	</c:choose>
                     <%-- <li class="active"><a href="${pageContext.request.contextPath}/index">Home</a></li> --%>
-                    <li><a href="${pageContext.request.contextPath}/shop">Shop</a></li>
-                    <li><a href="${pageContext.request.contextPath}/productDetails">Product</a></li>
+                    <%-- <li><a href="${pageContext.request.contextPath}/shop">Shop</a></li> --%>
                     <li><a href="${pageContext.request.contextPath}/cart">Cart</a></li>
-                    <li><a href="${pageContext.request.contextPath}/checkout">Checkout</a></li>
                 </ul>
             </nav>
             <!-- Button Group -->
@@ -133,7 +131,7 @@
 
 				<c:forEach items="${productinfoList}" var="prodInfo">
 				<div class="single-products-catagory clearfix">
-                    <a href="${pageContext.request.contextPath}/shop">
+                    <a href="${pageContext.request.contextPath}/productDetails?code=${prodInfo.productCodeSku}">
                         <img src="img/bg-img/1.jpg" alt="">
                         <!-- Hover Content -->
                         <div class="hover-content">
@@ -284,6 +282,12 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
          	<h6 id="signUpErrorMessage" style="color:red; display:none;"></h6>
            <form:form id="signUpform" method="POST" modelAttribute="user"
            action="${pageContext.request.contextPath}/createUser">
+           
+           <div class="form-group">
+           <%-- <form:label class="btn btn-primary" path="username">User <form:checkbox path="username" class="badgebox" name="username" id="username" /><span class="badge">&check;</span></form:label> --%>
+           <label for="User" class="btn btn-primary">User <input type="checkbox" id="UsId" class="badgebox" checked="checked" disabled="disabled"><!-- <span class="badge">&check;</span> --></label>
+           <form:label class="btn btn-primary" path="UserType">Vendor <form:checkbox path="UserType" class="badgebox" name="UserType" id="UserTypeId" value="Vendor"/><!-- <span class="badge">&check;</span> --></form:label>
+           </div>
             <div class="form-group">
           
               <form:label path="username">Username <span style="color:red;">*</span></form:label>

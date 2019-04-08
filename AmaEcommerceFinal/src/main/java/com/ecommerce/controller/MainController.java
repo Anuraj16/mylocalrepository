@@ -15,6 +15,7 @@ import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -30,12 +31,16 @@ import org.springframework.web.multipart.support.ByteArrayMultipartFileEditor;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.ecommerce.Utils.Utils;
 import com.ecommerce.dao.UserInfoDAO;
 import com.ecommerce.entity.Products;
 import com.ecommerce.entity.UserRole;
 import com.ecommerce.entity.Users;
+import com.ecommerce.model.CartInfo;
+import com.ecommerce.model.CartLineInfo;
 import com.ecommerce.model.ProductInfo;
 import com.ecommerce.model.UserInfo;
+import com.ecommerce.service.OrderDAO;
 import com.ecommerce.service.ProductDAO;
 import com.ecommerce.service.UserService;
 import com.ecommerce.validator.ProductInfoValidator;
@@ -53,6 +58,9 @@ public class MainController {
 
 	@Autowired
 	private ProductDAO productDAO;
+	
+	@Autowired
+	private OrderDAO orderDAO;
 
 	@Autowired
 	private ProductInfoValidator productInfoValidator;
@@ -71,7 +79,7 @@ public class MainController {
 	}
 
 	@RequestMapping(value = {"/" , "/index" }, method = RequestMethod.GET)
-	public ModelAndView welcomePage( @ModelAttribute("user") UserInfo user, @ModelAttribute("regError") String regError,@ModelAttribute("regSuccess") String regSuccess) {
+	public ModelAndView welcomePage(HttpServletRequest request, @ModelAttribute("user") UserInfo user, @ModelAttribute("regError") String regError,@ModelAttribute("regSuccess") String regSuccess) {
 		System.out.println("entered /index ");
 		ModelAndView mav = new ModelAndView("index");
 
@@ -120,17 +128,40 @@ public class MainController {
 		return "redirect:loginPage";
 	}
 	@RequestMapping(value = "/productDetails", method = RequestMethod.GET)
-	public String productDetailsPage(Model model, Principal principal) {
+	public ModelAndView productDetailsPage(HttpServletRequest request,Model model, @RequestParam(value = "code") String code) {
 		System.out.println("in product details action");
+		ModelAndView mav = new ModelAndView("product-details");
+		ProductInfo productInfo = null;
 
-		return "product-details";
-	}
-
-	@RequestMapping(value = "/cart", method = RequestMethod.GET)
-	public String cartPage(Model model, Principal principal) {
-		System.out.println("in cart action");
-
-		return "cart";
+		System.out.println("in /product get "+code);
+		if (code != null && code.length() > 0) {
+			CartInfo cartInfo = Utils.getCartInSession(request);
+			if(cartInfo.getCartLines().size()>0){
+				for (CartLineInfo cartLineInfo : cartInfo.getCartLines()) {
+					if(cartLineInfo.getProductInfo().getProductCodeSku().equalsIgnoreCase(code)){
+						System.out.println("fetching product from req");
+						productInfo=cartLineInfo.getProductInfo();
+						productInfo.setQty(cartLineInfo.getQuantity());
+					}
+				}
+			}
+			
+			if(productInfo==null){
+				System.out.println("fetching product from db");
+				productInfo = productDAO.findProductInfo(code);
+			}
+			System.out.println(productInfo.getProductName()+" desc "+productInfo.getProductDescription()+" file path "+productInfo.getDestFilePath());
+			File folder = new File(productInfo.getDestFilePath());
+			File[] fileNames = folder.listFiles();
+			System.out.println(fileNames.length);
+			List<String> fileUrlList= new ArrayList<String>(); 
+			for (File file : fileNames){
+				fileUrlList.add(file.getName());
+	        }
+			productInfo.setImageUrlList(fileUrlList);
+		}
+		mav.addObject("productForm",productInfo);
+		return mav;
 	}
 
 	@RequestMapping(value = "/shop", method = RequestMethod.GET)
@@ -139,15 +170,6 @@ public class MainController {
 
 		return "shop";
 	}
-
-	@RequestMapping(value = "/checkout", method = RequestMethod.GET)
-	public String checkoutPage(Model model, Principal principal) {
-		System.out.println("in checkout action");
-
-		return "checkout";
-	}
-
-
 	@RequestMapping(value = "/createUser", method = RequestMethod.POST)
 	public ModelAndView addUser(HttpServletRequest request, HttpServletResponse response,
 			@ModelAttribute("user") UserInfo userInfo,RedirectAttributes ra ,  BindingResult result) {
@@ -285,6 +307,109 @@ public class MainController {
 		response.getOutputStream().close();
 	}
 
+	@RequestMapping({ "/addToCart" })
+    public ModelAndView addToCart(HttpServletRequest request, Model model, //
+    		@ModelAttribute("productForm") ProductInfo productForm) {
+		ModelAndView mav = new ModelAndView("redirect:/productList");
+		System.out.println(" in addToCart action "+productForm.getProductCodeSku()+" qty "+productForm.getQty());
+		String code=productForm.getProductCodeSku();
+        Products product = null;
+       if (code != null && code.length() > 0) {
+            product = productDAO.findProduct(code);
+        }
+        if (product != null) {
+ 
+            // Cart info stored in Session.
+            CartInfo cartInfo = Utils.getCartInSession(request);
+ 
+            ProductInfo productInfo = new ProductInfo(product);
+ 
+            cartInfo.addProduct(productInfo, productForm.getQty());
+            Utils.setCartInSession(request, cartInfo);
+        }
+        // Redirect to shoppingCart page.
+        return mav ;
+    }
+	
+	@RequestMapping(value = "/cart", method = RequestMethod.GET)
+	public ModelAndView cartPage(HttpServletRequest request,Model model) {
+		System.out.println("in cart action");
+		ModelAndView mav = new ModelAndView("cart");
+		
+		CartInfo cartInfo = Utils.getCartInSession(request);
+		int subtotal=0;
+		if(cartInfo.getCartLines().size()>0){
+			for (CartLineInfo cartLineInfo : cartInfo.getCartLines()) {
+				System.out.println("amount "+cartLineInfo.getAmount());
+				subtotal +=(int) cartLineInfo.getAmount();
+			}
+			cartInfo.setSubTotal(subtotal);	
+			Utils.setCartInSession(request, cartInfo);
+		mav.addObject("cartInfo",cartInfo);
+		}else{
+			System.out.println("no items");
+			mav.addObject("noItemsMsg", "Oops ! No items in the cart.");
+		}
+        System.out.println("size of cartlines "+cartInfo.getCartLines().size());
+
+		return mav;
+	}
+	
+	@RequestMapping(value = "/checkout", method = RequestMethod.GET)
+	public ModelAndView checkoutPage(HttpServletRequest request,Model model) {
+		System.out.println("in checkout action");
+		ModelAndView mav = new ModelAndView("checkout");
+		CartInfo cartInfo = Utils.getCartInSession(request);
+		mav.addObject("cartInfo",cartInfo);
+		return mav;
+	}
+	
+	@RequestMapping(value = "/checkoutConfirmation", method = RequestMethod.POST)
+	public ModelAndView checkoutAndSave(HttpServletRequest request,Model model,
+			@ModelAttribute("customerInfo") CartInfo cartInfo) {
+		System.out.println("in checkout post action");
+		ModelAndView mav = new ModelAndView("checkoutConfirmation");
+		System.out.println(cartInfo.getCustomerInfo().getFirstName()+" lastname "+cartInfo.getCustomerInfo().getLastName());
+		CartInfo cartInfo1 = Utils.getCartInSession(request);
+		cartInfo1.setCustomerInfo(cartInfo.getCustomerInfo());
+		mav.addObject("cartInfo",cartInfo1);
+		return mav;
+	}
+	
+	@RequestMapping(value = "/placeOrder", method = RequestMethod.POST)
+	public ModelAndView placeOrder(HttpServletRequest request,Authentication authentication,Model model,
+			@ModelAttribute("cartInfo") CartInfo cartInfo) {
+		//CartInfo cartInfo1 = Utils.getCartInSession(request);
+		System.out.println("in placeOrder action");
+		ModelAndView mav = new ModelAndView("orderSuccess");
+		cartInfo = Utils.getCartInSession(request);
+			System.out.println("username from authentication "+authentication.getName());
+			cartInfo.getCustomerInfo().setUsername(authentication.getName());
+        if (cartInfo.isEmpty()) {
+            // Redirect to shoppingCart page.
+            //return "redirect:/shoppingCart";
+        }/* else if (!cartInfo.isValidCustomer()) {
+            // Enter customer info.
+           // return "redirect:/shoppingCartCustomer";
+        }*/
+        try {
+            orderDAO.saveOrder(cartInfo);
+            mav.addObject("successOrderMsg", "Thank you for the order");
+        } catch (Exception e) {
+        	System.out.println("Some exception in placing order");
+        	mav.addObject("failureOrderMsg", "Order Placement not successfull,Please try again");
+        }
+        // Remove Cart In Session.
+        Utils.removeCartInSession(request);
+         
+        // Store Last ordered cart to Session.
+        Utils.storeLastOrderedCartInSession(request, cartInfo);
+ 
+        // Redirect to successful page.
+        //return "redirect:/shoppingCartFinalize";
+        return mav;
+	}
+	
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm"); //yyyy-MM-dd'T'HH:mm:ssZ example

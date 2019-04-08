@@ -1,6 +1,11 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+<%-- <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%> --%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="security"%>
 <html>
 
 <head>
@@ -73,11 +78,28 @@
             <!-- Amado Nav -->
             <nav class="amado-nav">
                 <ul>
-                    <li><a href="${pageContext.request.contextPath}/index">Home</a></li>
-                    <li><a href="${pageContext.request.contextPath}/shop">Shop</a></li>
-                    <li><a href="${pageContext.request.contextPath}/productDetails">Product</a></li>
-                    <li class="active"><a href="${pageContext.request.contextPath}/cart">Cart</a></li>
-                    <li><a href="${pageContext.request.contextPath}/checkout">Checkout</a></li>
+                	<!-- <li class="active">
+                	</li> -->
+                	<c:choose>
+                	<c:when test="${pageContext.request.userPrincipal.name != null}">
+                	<li><span style="color:#131212;font-size:14px;">Welcome ${pageContext.request.userPrincipal.name}</span></li>
+                	<li><a href="${pageContext.request.contextPath}/logout">Logout</a></li>
+                	<security:authorize  access="hasRole('ROLE_USER')">
+                	<li><a href="${pageContext.request.contextPath}/orders">Orders</a></li>
+                	</security:authorize>
+                	<security:authorize  access="hasRole('ROLE_ADMIN')">
+                	<li><a href="${pageContext.request.contextPath}/product">Create Product</a></li>
+                	</security:authorize>
+                	</c:when>
+                	<c:otherwise>
+                	<li>
+						<a href="#" data-toggle="modal" data-target="#myModal" onClick="$('#loginModalId').show(); $('#signupModalId').hide()">Login/Signup</a>
+                	</li>
+                	</c:otherwise>
+                	</c:choose>
+                    <%-- <li class="active"><a href="${pageContext.request.contextPath}/index">Home</a></li> --%>
+                    <%-- <li><a href="${pageContext.request.contextPath}/shop">Shop</a></li> --%>
+                    <li><a href="${pageContext.request.contextPath}/cart">Cart</a></li>
                 </ul>
             </nav>
             <!-- Button Group -->
@@ -119,29 +141,34 @@
                                         <th>Quantity</th>
                                     </tr>
                                 </thead>
+                                <%-- <c:if test="${not empty noItemsMsg}"> --%>
                                 <tbody>
-                                    <tr>
+                                <c:forEach items="${cartInfo.cartLines}" var="cartlines" varStatus="varstatus">
+                                <tr>
                                         <td class="cart_product_img">
                                             <a href="#"><img src="img/bg-img/cart1.jpg" alt="Product"></a>
                                         </td>
                                         <td class="cart_product_desc">
-                                            <h5>White Modern Chair</h5>
+                                            <h5><c:out value="${cartlines.productInfo.productName}"/></h5>
                                         </td>
                                         <td class="price">
-                                            <span>$130</span>
+                                            <span><c:out value="${cartlines.productInfo.unitPrice}"/></span>
                                         </td>
                                         <td class="qty">
                                             <div class="qty-btn d-flex">
-                                                <p>Qty</p>
+                                                <!-- <p>Qty</p> -->
                                                 <div class="quantity">
-                                                    <span class="qty-minus" onclick="var effect = document.getElementById('qty'); var qty = effect.value; if( !isNaN( qty ) &amp;&amp; qty &gt; 1 ) effect.value--;return false;"><i class="fa fa-minus" aria-hidden="true"></i></span>
-                                                    <input type="number" class="qty-text" id="qty" step="1" min="1" max="300" name="quantity" value="1">
-                                                    <span class="qty-plus" onclick="var effect = document.getElementById('qty'); var qty = effect.value; if( !isNaN( qty )) effect.value++;return false;"><i class="fa fa-plus" aria-hidden="true"></i></span>
+                                                  <%--   <span class="qty-minus" onclick="var effect = document.getElementById('qty'); var qty = effect.value; if( !isNaN( qty ) &amp;&amp; qty &gt; 1 ) effect.value--;return false;"><i class="fa fa-minus" aria-hidden="true"></i></span>
+                                                   <!--  <input type="number" class="qty-text" id="qty" step="1" min="1" max="300" name="quantity" value="1"> -->
+                                                   <form:input path="${cartlines.quantity}" name="qty" id="qty" class="qty-text" step="1" min="1" max="300" value="1" />
+                                                    <span class="qty-plus" onclick="var effect = document.getElementById('qty'); var qty = effect.value; if( !isNaN( qty )) effect.value++;return false;"><i class="fa fa-plus" aria-hidden="true"></i></span> --%>
+                                                   <span> <c:out value="${cartlines.quantity}"/></span>
                                                 </div>
                                             </div>
                                         </td>
                                     </tr>
-                                    <tr>
+                                </c:forEach>
+                                   <!--  <tr>
                                         <td class="cart_product_img">
                                             <a href="#"><img src="img/bg-img/cart2.jpg" alt="Product"></a>
                                         </td>
@@ -182,8 +209,10 @@
                                                 </div>
                                             </div>
                                         </td>
-                                    </tr>
+                                    </tr> -->
                                 </tbody>
+                                <%-- </c:if> --%>
+                                    <h3 id="noItemsMessageId" style="color:red; display:none;" align="center"></h3>
                             </table>
                         </div>
                     </div>
@@ -191,9 +220,9 @@
                         <div class="cart-summary">
                             <h5>Cart Total</h5>
                             <ul class="summary-table">
-                                <li><span>subtotal:</span> <span>$140.00</span></li>
+                                <li><span>subtotal:</span> <span><c:out value="${cartInfo.subTotal}"/></span></li>
                                 <li><span>delivery:</span> <span>Free</span></li>
-                                <li><span>total:</span> <span>$140.00</span></li>
+                                <li><span>total:</span> <span><c:out value="${cartInfo.subTotal}"/></span></li>
                             </ul>
                             <div class="cart-btn mt-100">
                                 <a href="${pageContext.request.contextPath}/checkout" class="btn amado-btn w-100">Checkout</a>
@@ -294,6 +323,15 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
     <!-- Active js -->
     <script src="script/active.js"></script>
 
+	<c:if test="${not empty noItemsMsg}">
+    <script> 
+    $(window).on('load',function(){
+    	var msg = "${noItemsMsg}";
+    	$('#noItemsMessageId').show();
+        $('#noItemsMessageId').append(msg);
+    });
+    </script>
+</c:if>
 </body>
 
 </html>

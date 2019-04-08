@@ -76,7 +76,7 @@ private static final long serialVersionUID = 1L;
 	private String username;
 	private String password;
 	private String emailId;
-	private double phone;
+	private String phone;
 	private int active;
 	@ManyToMany
 	@JoinTable(name = "userrolemapping", 
@@ -88,6 +88,7 @@ private static final long serialVersionUID = 1L;
 	
 	private String firstName;
 	private String lastName;
+	private int is_vendor;
 	
 	public Users() {
 		// TODO Auto-generated constructor stub
@@ -131,14 +132,6 @@ private static final long serialVersionUID = 1L;
 		this.emailId = emailId;
 	}
 
-	public double getPhone() {
-		return phone;
-	}
-
-	public void setPhone(double phone) {
-		this.phone = phone;
-	}
-
 	public String getFirstName() {
 		return firstName;
 	}
@@ -172,6 +165,25 @@ private static final long serialVersionUID = 1L;
 		this.id = id;
 	}
 
+
+	public String getPhone() {
+		return phone;
+	}
+
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+
+	public int getIs_vendor() {
+		return is_vendor;
+	}
+
+
+	public void setIs_vendor(int is_vendor) {
+		this.is_vendor = is_vendor;
+	}
 
 	/*@Column(name = "id", length = 30, nullable = false)
 	public int getUserId() {

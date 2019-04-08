@@ -32,8 +32,19 @@ public class ProductDAOImpl implements ProductDAO {
 	}
 
 	public ProductInfo findProductInfo(String code) {
-		// TODO Auto-generated method stub
-		return null;
+		Session session;
+		Products products =null;
+		
+		 try {
+			    session = sessionFactory.getCurrentSession();
+			} catch (HibernateException e) {
+			    session = sessionFactory.openSession();
+			}
+	        Criteria crit = session.createCriteria(Products.class);
+	        crit.add(Restrictions.eq("productCodeSku", code));
+	        products=(Products) crit.uniqueResult();
+	        ProductInfo productInfo = new ProductInfo(products);
+	        return productInfo ;
 	}
 
 	public void save(ProductInfo productInfo) {

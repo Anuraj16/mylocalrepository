@@ -1,6 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="security"%>
 <html>
 
 <head>
@@ -72,11 +77,28 @@
             <!-- Amado Nav -->
             <nav class="amado-nav">
                 <ul>
-                    <li><a href="${pageContext.request.contextPath}/index">Home</a></li>
-                    <li><a href="${pageContext.request.contextPath}/shop">Shop</a></li>
-                    <li class="active"><a href="${pageContext.request.contextPath}/productDetails">Product</a></li>
+                	<!-- <li class="active">
+                	</li> -->
+                	<c:choose>
+                	<c:when test="${pageContext.request.userPrincipal.name != null}">
+                	<li><span style="color:#131212;font-size:14px;">Welcome ${pageContext.request.userPrincipal.name}</span></li>
+                	<li><a href="${pageContext.request.contextPath}/logout">Logout</a></li>
+                	<security:authorize  access="hasRole('ROLE_USER')">
+                	<li><a href="${pageContext.request.contextPath}/orders">Orders</a></li>
+                	</security:authorize>
+                	<security:authorize  access="hasRole('ROLE_ADMIN')">
+                	<li><a href="${pageContext.request.contextPath}/product">Create Product</a></li>
+                	</security:authorize>
+                	</c:when>
+                	<c:otherwise>
+                	<li>
+						<a href="#" data-toggle="modal" data-target="#myModal" onClick="$('#loginModalId').show(); $('#signupModalId').hide()">Login/Signup</a>
+                	</li>
+                	</c:otherwise>
+                	</c:choose>
+                    <%-- <li class="active"><a href="${pageContext.request.contextPath}/index">Home</a></li> --%>
+                    <%-- <li><a href="${pageContext.request.contextPath}/shop">Shop</a></li> --%>
                     <li><a href="${pageContext.request.contextPath}/cart">Cart</a></li>
-                    <li><a href="${pageContext.request.contextPath}/checkout">Checkout</a></li>
                 </ul>
             </nav>
             <!-- Button Group -->
@@ -104,7 +126,7 @@
         <div class="single-product-area section-padding-100 clearfix">
             <div class="container-fluid">
 
-                <div class="row">
+                <!-- <div class="row">
                     <div class="col-12">
                         <nav aria-label="breadcrumb">
                             <ol class="breadcrumb mt-50">
@@ -115,29 +137,53 @@
                             </ol>
                         </nav>
                     </div>
-                </div>
+                </div> -->
 
                 <div class="row">
                     <div class="col-12 col-lg-7">
                         <div class="single_product_thumb">
                             <div id="product_details_slider" class="carousel slide" data-ride="carousel">
                                 <ol class="carousel-indicators">
-                                    <li class="active" data-target="#product_details_slider" data-slide-to="0" style="background-image: url(img/product-img/pro-big-1.jpg);">
+                                <!-- slider not working after c for each. to be solved later -->
+                                <c:forEach items="${productForm.imageUrlList}" var="imgUrlList" varStatus="varstatus">
+                                <c:choose>
+                                <c:when test="${varstatus.index==0}">
+                                <li class="active" data-target="#product_details_slider" data-slide-to="${varstatus.index}" style="background-image: url(img/product-img/pro-big-1.jpg);">
                                     </li>
-                                    <li data-target="#product_details_slider" data-slide-to="1" style="background-image: url(img/product-img/pro-big-2.jpg);">
+                                </c:when>
+                                <c:otherwise>
+                                 <li data-target="#product_details_slider" data-slide-to="1" style="background-image: url(img/product-img/pro-big-2.jpg);">
+                                    </li>
+                                </c:otherwise>
+                                </c:choose>
+                                </c:forEach>
+                                   <!--  <li data-target="#product_details_slider" data-slide-to="1" style="background-image: url(img/product-img/pro-big-2.jpg);">
                                     </li>
                                     <li data-target="#product_details_slider" data-slide-to="2" style="background-image: url(img/product-img/pro-big-3.jpg);">
                                     </li>
                                     <li data-target="#product_details_slider" data-slide-to="3" style="background-image: url(img/product-img/pro-big-4.jpg);">
-                                    </li>
+                                    </li> -->
                                 </ol>
                                 <div class="carousel-inner">
-                                    <div class="carousel-item active">
+                                <c:forEach items="${productForm.imageUrlList}" var="imgUrlList" varStatus="varstatus">
+                                <c:choose>
+                                <c:when test="${varstatus.index==0}">
+                                <div class="carousel-item active">
                                         <a class="gallery_img" href="img/product-img/pro-big-1.jpg">
                                             <img class="d-block w-100" src="img/product-img/pro-big-1.jpg" alt="First slide">
                                         </a>
                                     </div>
-                                    <div class="carousel-item">
+                                </c:when>
+                                <c:otherwise>
+                                 <div class="carousel-item">
+                                        <a class="gallery_img" href="img/product-img/pro-big-2.jpg">
+                                            <img class="d-block w-100" src="img/product-img/pro-big-2.jpg" alt="Second slide">
+                                        </a>
+                                    </div>
+                                </c:otherwise>
+                                </c:choose>
+                                 </c:forEach>
+                                    <!-- <div class="carousel-item">
                                         <a class="gallery_img" href="img/product-img/pro-big-2.jpg">
                                             <img class="d-block w-100" src="img/product-img/pro-big-2.jpg" alt="Second slide">
                                         </a>
@@ -151,7 +197,7 @@
                                         <a class="gallery_img" href="img/product-img/pro-big-4.jpg">
                                             <img class="d-block w-100" src="img/product-img/pro-big-4.jpg" alt="Fourth slide">
                                         </a>
-                                    </div>
+                                    </div> -->
                                 </div>
                             </div>
                         </div>
@@ -161,10 +207,10 @@
                             <!-- Product Meta Data -->
                             <div class="product-meta-data">
                                 <div class="line"></div>
-                                <p class="product-price">$180</p>
-                                <a href="${pageContext.request.contextPath}/productDetails">
-                                    <h6>White Modern Chair</h6>
-                                </a>
+                                <p class="product-price"><c:out value="${productForm.unitPrice}"/></p>
+                                <%-- <a href="${pageContext.request.contextPath}/productDetails"> --%>
+                                    <h6><c:out value="${productForm.productName}"/></h6>
+                               <!--  </a> -->
                                 <!-- Ratings & Review -->
                                 <div class="ratings-review mb-15 d-flex align-items-center justify-content-between">
                                     <div class="ratings">
@@ -183,11 +229,11 @@
                             </div>
 
                             <div class="short_overview my-5">
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid quae eveniet culpa officia quidem mollitia impedit iste asperiores nisi reprehenderit consequatur, autem, nostrum pariatur enim?</p>
+                                <p><c:out value="${productForm.productDescription}"/></p>
                             </div>
 
                             <!-- Add to Cart Form -->
-                            <form class="cart clearfix" method="post">
+                            <%-- <form class="cart clearfix" method="POST" action="${pageContext.request.contextPath}/addToCart">
                                 <div class="cart-btn d-flex mb-50">
                                     <p>Qty</p>
                                     <div class="quantity">
@@ -197,8 +243,20 @@
                                     </div>
                                 </div>
                                 <button type="submit" name="addtocart" value="5" class="btn amado-btn">Add to cart</button>
-                            </form>
-
+                            </form> --%>
+							 <form:form class="cart clearfix" action="${pageContext.request.contextPath}/addToCart" method="POST" modelAttribute="productForm">
+							 <div class="cart-btn d-flex mb-50">
+							 <form:hidden path="productCodeSku"/>
+							 <form:label path="qty"><p>Qty</p></form:label>
+							 <div class="quantity">
+                                 <span class="qty-minus" onclick="var effect = document.getElementById('qty'); var qty = effect.value; if( !isNaN( qty ) &amp;&amp; qty &gt; 1 ) effect.value--;return false;"><i class="fa fa-caret-down" aria-hidden="true"></i></span>
+                                 <!-- <input type="number" class="qty-text" id="qty" step="1" min="1" max="300" name="quantity" value="1"> -->
+                                 <form:input path="qty" name="qty" id="qty" class="qty-text" step="1" min="1" max="300" />
+                                 <span class="qty-plus" onclick="var effect = document.getElementById('qty'); var qty = effect.value; if( !isNaN( qty )) effect.value++;return false;"><i class="fa fa-caret-up" aria-hidden="true"></i></span>
+                              </div>
+							 </div>
+							 <button type="submit" name="addtocart" value="5" class="btn amado-btn">Add to cart</button>
+							</form:form>
                         </div>
                     </div>
                 </div>

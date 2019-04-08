@@ -73,11 +73,28 @@
             <!-- Amado Nav -->
             <nav class="amado-nav">
                 <ul>
-                    <li><a href="${pageContext.request.contextPath}/index">Home</a></li>
-                    <li class="active"><a href="${pageContext.request.contextPath}/shop">Shop</a></li>
-                    <li><a href="${pageContext.request.contextPath}/productDetails">Product</a></li>
+                	<!-- <li class="active">
+                	</li> -->
+                	<c:choose>
+                	<c:when test="${pageContext.request.userPrincipal.name != null}">
+                	<li><span style="color:#131212;font-size:14px;">Welcome ${pageContext.request.userPrincipal.name}</span></li>
+                	<li><a href="${pageContext.request.contextPath}/logout">Logout</a></li>
+                	<security:authorize  access="hasRole('ROLE_USER')">
+                	<li><a href="${pageContext.request.contextPath}/orders">Orders</a></li>
+                	</security:authorize>
+                	<security:authorize  access="hasRole('ROLE_ADMIN')">
+                	<li><a href="${pageContext.request.contextPath}/product">Create Product</a></li>
+                	</security:authorize>
+                	</c:when>
+                	<c:otherwise>
+                	<li>
+						<a href="#" data-toggle="modal" data-target="#myModal" onClick="$('#loginModalId').show(); $('#signupModalId').hide()">Login/Signup</a>
+                	</li>
+                	</c:otherwise>
+                	</c:choose>
+                    <%-- <li class="active"><a href="${pageContext.request.contextPath}/index">Home</a></li> --%>
+                    <%-- <li><a href="${pageContext.request.contextPath}/shop">Shop</a></li> --%>
                     <li><a href="${pageContext.request.contextPath}/cart">Cart</a></li>
-                    <li><a href="${pageContext.request.contextPath}/checkout">Checkout</a></li>
                 </ul>
             </nav>
             <!-- Button Group -->
