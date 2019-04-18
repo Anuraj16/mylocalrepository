@@ -1,10 +1,8 @@
 package com.ecommerce.serviceimpl;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -15,11 +13,9 @@ import org.hibernate.criterion.Projection;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 
 import com.ecommerce.entity.Order;
 import com.ecommerce.entity.OrderDetails;
-import com.ecommerce.entity.Users;
 import com.ecommerce.model.CartInfo;
 import com.ecommerce.model.CartLineInfo;
 import com.ecommerce.model.OrderDetailInfo;
@@ -144,6 +140,7 @@ public class OrderDAOImpl implements OrderDAO {
 		List<OrderDetailInfo> orderDetailInfoList= new ArrayList<OrderDetailInfo>();
 		List<OrderDetails> orderDetailsList= new ArrayList<OrderDetails>();
 		OrderDetailInfo orderDetailInfo=null;
+		System.out.println("order number in listOrderDetailInfos "+order_number);
 		 try {
         	Session session = sessionFactory.getCurrentSession();
  	        Criteria crit = session.createCriteria(OrderDetails.class)
@@ -152,7 +149,7 @@ public class OrderDAOImpl implements OrderDAO {
  	       orderDetailsList= crit.list();
  	       for (OrderDetails orderDetails : orderDetailsList) {
  	    	  orderDetailInfo= new OrderDetailInfo(orderDetails);
- 	    	 orderDetailInfoList.add(orderDetailInfo);
+ 	    	  orderDetailInfoList.add(orderDetailInfo);
  	    	  
 		}
  	       System.out.println("size of orderlines for "+order_number+" is "+orderDetailsList.size());

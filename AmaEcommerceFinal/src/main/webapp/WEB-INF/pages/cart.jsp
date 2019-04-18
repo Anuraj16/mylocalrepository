@@ -257,7 +257,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
         </div>
     </footer>
     <!-- ##### Footer Area End ##### -->
-
+	<jsp:include page="_loginPopup.jsp"/>
     <!-- ##### jQuery (Necessary for All JavaScript Plugins) ##### -->
     <script src="script/jquery/jquery-2.2.4.min.js"></script>
     <!-- Popper js -->
