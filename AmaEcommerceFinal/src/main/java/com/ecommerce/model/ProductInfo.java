@@ -23,6 +23,8 @@ public class ProductInfo {
     private String imageUrl;
     private List<String> imageUrlList;
     private int qty;
+    private String fileNames;
+    private String vendorUserName;
     public ProductInfo() {
 
     }
@@ -33,6 +35,7 @@ public class ProductInfo {
     	this.unitPrice = products.getUnitPrice();
     	this.destFilePath= products.getDestFilePath();
     	this.productDescription=products.getProductDescription();
+    	this.fileNames=products.getFileNames();
     	//this.newProduct = products.isNewProduct();
     	//this.fileData = products.getFileData();
     	
@@ -126,5 +129,19 @@ public class ProductInfo {
 		this.qty = qty;
 	}
 
-	
+	public String getFileNames() {
+		return fileNames;
+	}
+
+	public void setFileNames(String fileNames) {
+		this.fileNames = fileNames;
+	}
+
+	public String getVendorUserName() {
+		return vendorUserName;
+	}
+
+	public void setVendorUserName(String vendorUserName) {
+		this.vendorUserName = vendorUserName;
+	}
 }

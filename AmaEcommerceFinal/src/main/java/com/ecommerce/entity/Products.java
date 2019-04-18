@@ -26,6 +26,7 @@ public class Products {
 	@Lob
 	private String productDescription;
 	private long supplierId;
+	private String vendorUsername;
 	private long categoryId;
 	private int qtyPerUnit;
 	private double unitPrice;
@@ -37,6 +38,8 @@ public class Products {
 	private int unitsInStock;
 	@Lob
 	private String destFilePath;
+	@Lob
+	private String fileNames;
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date dateCreated;
@@ -152,6 +155,16 @@ public class Products {
 	public void setRowstate(int rowstate) {
 		this.rowstate = rowstate;
 	}
-	
-
+	public String getFileNames() {
+		return fileNames;
+	}
+	public void setFileNames(String fileNames) {
+		this.fileNames = fileNames;
+	}
+	public String getVendorUsername() {
+		return vendorUsername;
+	}
+	public void setVendorUsername(String vendorUsername) {
+		this.vendorUsername = vendorUsername;
+	}
 }

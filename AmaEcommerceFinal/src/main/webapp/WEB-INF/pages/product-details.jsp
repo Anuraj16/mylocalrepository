@@ -16,7 +16,7 @@
     <!-- The above 4 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
     <!-- Title  -->
-    <title>Amado - Furniture Ecommerce Template | Product Details</title>
+    <title>Zariya! | Product Details</title>
 
     <!-- Favicon  -->
     <link rel="icon" href="img/core-img/favicon.ico">
@@ -56,7 +56,7 @@
         <div class="mobile-nav">
             <!-- Navbar Brand -->
             <div class="amado-navbar-brand">
-                <a href="${pageContext.request.contextPath}/index"><img src="img/core-img/logo.png" alt=""></a>
+                <a href="${pageContext.request.contextPath}/index"><img src="img/core-img/logoz.png" alt=""></a>
             </div>
             <!-- Navbar Toggler -->
             <div class="amado-navbar-toggler">
@@ -72,21 +72,22 @@
             </div>
             <!-- Logo -->
             <div class="logo">
-                <a href="${pageContext.request.contextPath}/index"><img src="img/core-img/logo.png" alt=""></a>
+                <a href="${pageContext.request.contextPath}/index"><img src="img/core-img/logoz.png" alt=""></a>
             </div>
             <!-- Amado Nav -->
-            <nav class="amado-nav">
+             <nav class="amado-nav">
                 <ul>
                 	<!-- <li class="active">
                 	</li> -->
+                	<li class="active"><a href="${pageContext.request.contextPath}/index">Home</a></li>
                 	<c:choose>
                 	<c:when test="${pageContext.request.userPrincipal.name != null}">
                 	<li><span style="color:#131212;font-size:14px;">Welcome ${pageContext.request.userPrincipal.name}</span></li>
                 	<li><a href="${pageContext.request.contextPath}/logout">Logout</a></li>
-                	<security:authorize  access="hasRole('ROLE_USER')">
+                	<security:authorize  access="hasAnyRole('ROLE_USER','ROLE_ADMIN')">
                 	<li><a href="${pageContext.request.contextPath}/orders">Orders</a></li>
                 	</security:authorize>
-                	<security:authorize  access="hasRole('ROLE_ADMIN')">
+                	<security:authorize  access="hasRole('ROLE_VENDOR')">
                 	<li><a href="${pageContext.request.contextPath}/product">Create Product</a></li>
                 	</security:authorize>
                 	</c:when>
@@ -96,21 +97,20 @@
                 	</li>
                 	</c:otherwise>
                 	</c:choose>
-                    <%-- <li class="active"><a href="${pageContext.request.contextPath}/index">Home</a></li> --%>
                     <%-- <li><a href="${pageContext.request.contextPath}/shop">Shop</a></li> --%>
                     <li><a href="${pageContext.request.contextPath}/cart">Cart</a></li>
                 </ul>
             </nav>
             <!-- Button Group -->
-            <div class="amado-btn-group mt-30 mb-100">
+            <!-- <div class="amado-btn-group mt-30 mb-100">
                 <a href="#" class="btn amado-btn mb-15">%Discount%</a>
                 <a href="#" class="btn amado-btn active">New this week</a>
-            </div>
+            </div> -->
             <!-- Cart Menu -->
             <div class="cart-fav-search mb-100">
                 <a href="${pageContext.request.contextPath}/cart" class="cart-nav"><img src="img/core-img/cart.png" alt=""> Cart <span>(0)</span></a>
-                <a href="#" class="fav-nav"><img src="img/core-img/favorites.png" alt=""> Favourite</a>
-                <a href="#" class="search-nav"><img src="img/core-img/search.png" alt=""> Search</a>
+             <!--    <a href="#" class="fav-nav"><img src="img/core-img/favorites.png" alt=""> Favourite</a>
+                <a href="#" class="search-nav"><img src="img/core-img/search.png" alt=""> Search</a> -->
             </div>
             <!-- Social Button -->
             <div class="social-info d-flex justify-content-between">
@@ -148,11 +148,11 @@
                                 <c:forEach items="${productForm.imageUrlList}" var="imgUrlList" varStatus="varstatus">
                                 <c:choose>
                                 <c:when test="${varstatus.index==0}">
-                                <li class="active" data-target="#product_details_slider" data-slide-to="${varstatus.index}" style="background-image: url(img/product-img/pro-big-1.jpg);">
+                                <li class="active" data-target="#product_details_slider" data-slide-to="${varstatus.index}" style="background-image: url(${imgUrlList});">
                                     </li>
                                 </c:when>
                                 <c:otherwise>
-                                 <li data-target="#product_details_slider" data-slide-to="1" style="background-image: url(img/product-img/pro-big-2.jpg);">
+                                 <li data-target="#product_details_slider" data-slide-to="1" style="background-image: url(${imgUrlList});">
                                     </li>
                                 </c:otherwise>
                                 </c:choose>
@@ -169,15 +169,15 @@
                                 <c:choose>
                                 <c:when test="${varstatus.index==0}">
                                 <div class="carousel-item active">
-                                        <a class="gallery_img" href="img/product-img/pro-big-1.jpg">
-                                            <img class="d-block w-100" src="img/product-img/pro-big-1.jpg" alt="First slide">
+                                        <a class="gallery_img" href="${imgUrlList}">
+                                            <img class="d-block w-100" src="${imgUrlList}" alt="First slide">
                                         </a>
                                     </div>
                                 </c:when>
                                 <c:otherwise>
                                  <div class="carousel-item">
-                                        <a class="gallery_img" href="img/product-img/pro-big-2.jpg">
-                                            <img class="d-block w-100" src="img/product-img/pro-big-2.jpg" alt="Second slide">
+                                        <a class="gallery_img" href="${imgUrlList}">
+                                            <img class="d-block w-100" src="${imgUrlList}" alt="Second slide">
                                         </a>
                                     </div>
                                 </c:otherwise>
@@ -267,7 +267,7 @@
     <!-- ##### Main Content Wrapper End ##### -->
 
     <!-- ##### Newsletter Area Start ##### -->
-    <section class="newsletter-area section-padding-100-0">
+    <%-- <section class="newsletter-area section-padding-100-0">
         <div class="container">
             <div class="row align-items-center">
                 <!-- Newsletter Text -->
@@ -288,7 +288,7 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> --%>
     <!-- ##### Newsletter Area End ##### -->
 
     <!-- ##### Footer Area Start ##### -->
@@ -300,12 +300,12 @@
                     <div class="single_widget_area">
                         <!-- Logo -->
                         <div class="footer-logo mr-50">
-                            <a href="${pageContext.request.contextPath}/index"><img src="img/core-img/logo2.png" alt=""></a>
+                            <a href="${pageContext.request.contextPath}/index"><img src="img/core-img/logoz.png" alt=""></a>
                         </div>
                         <!-- Copywrite Text -->
-                        <p class="copywrite"><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
-<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
+                        <p class="copywrite">
+Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved
+</p>
                     </div>
                 </div>
                 <!-- Single Widget Area -->
@@ -320,18 +320,18 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
                                         <li class="nav-item active">
                                             <a class="nav-link" href="${pageContext.request.contextPath}/index">Home</a>
                                         </li>
-                                        <li class="nav-item">
+                                        <%-- <li class="nav-item">
                                             <a class="nav-link" href="${pageContext.request.contextPath}/shop">Shop</a>
-                                        </li>
-                                        <li class="nav-item">
+                                        </li> --%>
+                                      <%--   <li class="nav-item">
                                             <a class="nav-link" href="${pageContext.request.contextPath}/productDetails">Product</a>
-                                        </li>
+                                        </li> --%>
                                         <li class="nav-item">
                                             <a class="nav-link" href="${pageContext.request.contextPath}/cart">Cart</a>
                                         </li>
-                                        <li class="nav-item">
+                                        <%-- <li class="nav-item">
                                             <a class="nav-link" href="${pageContext.request.contextPath}/checkout">Checkout</a>
-                                        </li>
+                                        </li> --%>
                                     </ul>
                                 </div>
                             </nav>

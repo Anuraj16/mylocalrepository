@@ -6,6 +6,7 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -28,6 +29,7 @@ public class OrderDetails implements Serializable{
 	private long order_detailId;
 	//private long order_id;
 	private String product_id;
+	private String product_name;
 	private long order_number;
 	private double price;
 	private long quantity;
@@ -42,7 +44,10 @@ public class OrderDetails implements Serializable{
 	/*@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "order_id", nullable = false)*/
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="order_id",referencedColumnName="order_id", nullable=false)
+	@JoinColumn(name="order_id",referencedColumnName="order_id", 
+	nullable=false,
+	insertable=true,
+	foreignKey=@ForeignKey(name="ORDER_DETAIL_ORDERID"))
 	private Order order;
 	
 	public OrderDetails() {
@@ -126,5 +131,13 @@ public class OrderDetails implements Serializable{
 	}
 	public void setOrder_number(long order_number) {
 		this.order_number = order_number;
+	}
+
+	public String getProduct_name() {
+		return product_name;
+	}
+
+	public void setProduct_name(String product_name) {
+		this.product_name = product_name;
 	}
 }

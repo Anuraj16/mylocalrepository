@@ -1,4 +1,6 @@
-<!DOCTYPE html>
+<%-- <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%> --%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
@@ -14,13 +16,13 @@
     <!-- The above 4 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
     <!-- Title  -->
-    <title>Zariya! | Checkout</title>
+    <title>Zariya! | Cart</title>
 
     <!-- Favicon  -->
     <link rel="icon" href="img/core-img/favicon.ico">
 
     <!-- Core Style CSS -->
-   <link rel="stylesheet" href="styles/core-style.css">
+    <link rel="stylesheet" href="styles/core-style.css">
     <link rel="stylesheet" href="styles/style.css">
     <link rel="stylesheet" href="styles/bootstrap.min.css">
     <link rel="stylesheet" href="styles/additionalStyles.css">
@@ -107,8 +109,8 @@
             </div> -->
             <!-- Cart Menu -->
             <div class="cart-fav-search mb-100">
-                <a href="${pageContext.request.contextPath}/cart" class="cart-nav"><img src="img/core-img/cart.png" alt=""> Cart <span>(0)</span></a>
-               <!--  <a href="#" class="fav-nav"><img src="img/core-img/favorites.png" alt=""> Favourite</a>
+               <%--  <a href="${pageContext.request.contextPath}/cart" class="cart-nav"><img src="img/core-img/cart.png" alt=""> Cart <span>(0)</span></a> --%>
+                <!-- <a href="#" class="fav-nav"><img src="img/core-img/favorites.png" alt=""> Favourite</a>
                 <a href="#" class="search-nav"><img src="img/core-img/search.png" alt=""> Search</a> -->
             </div>
             <!-- Social Button -->
@@ -123,69 +125,92 @@
 
         <div class="cart-table-area section-padding-100">
             <div class="container-fluid">
-            <form:form id="customerInfo" name="customerInfo" method="POST" commandName="cartInfo" 
-                             action="${pageContext.request.contextPath}/checkoutConfirmation">
                 <div class="row">
-                    <div class="col-12 col-lg-8">
-                        <div class="checkout_details_area mt-50 clearfix">
+                    <div class="col-12 col-lg-12">
+                        <div class="cart-title mt-50">
+                            <h2>Order History</h2>
+                        </div>
 
-                            <div class="cart-title">
-                                <h2>Checkout</h2>
-                            </div>
-                                <div class="row">
-                                    <div class="col-md-6 mb-3">
-                                        <!-- <input type="text" class="form-control" id="first_name" value="" placeholder="First Name" required> -->
-                                        <form:input path="customerInfo.firstName" class="form-control" placeholder="Last Name" name="firstName" id="firstName" />
-                                    </div>
-                                    <div class="col-md-6 mb-3">
-                                        <!-- <input type="text" class="form-control" id="last_name" value="" placeholder="Last Name" required> -->
-                                        <form:input path="customerInfo.lastName" class="form-control" placeholder="First Name" name="lastName" id="lastName" />
-                                    </div>
-                                    <!-- <div class="col-12 mb-3">
-                                        <input type="text" class="form-control" id="company" placeholder="Company Name" value="">
-                                    </div> -->
-                                    <div class="col-12 mb-3">
-                                       <!--  <input type="email" class="form-control" id="email" placeholder="Email" value=""> -->
-                                       <form:input path="customerInfo.emailId" class="form-control" placeholder="Email" name="emailId" id="emailId" />
-                                    </div>
-                                    <div class="col-12 mb-3">
-                                        <!-- <select class="w-100" id="country">
-                                        <option value="usa">United States</option>
-                                        <option value="uk">United Kingdom</option>
-                                        <option value="ger">Germany</option>
-                                        <option value="fra">France</option>
-                                        <option value="ind">India</option>
-                                        <option value="aus">Australia</option>
-                                        <option value="bra">Brazil</option>
-                                        <option value="cana">Canada</option>
-                                    </select> -->
-                                    <form:input path="customerInfo.country" class="form-control" placeholder="Country" name="country" id="country" />
-                                    </div>
-                                    <div class="col-12 mb-3">
-                                        <!-- <input type="text" class="form-control mb-3" id="street_address" placeholder="Address" value=""> -->
-                                        <form:input path="customerInfo.address" class="form-control" placeholder="Address" name="address" id="address" />
-                                    </div>
-                                    <div class="col-12 mb-3">
-                                        <!-- <input type="text" class="form-control" id="city" placeholder="Town" value=""> -->
-                                        <form:input path="customerInfo.city" class="form-control" placeholder="City" name="city" id="city" />
-                                    </div>
-                                    <div class="col-md-6 mb-3">
-                                        <!-- <input type="text" class="form-control" id="zipCode" placeholder="Zip Code" value=""> -->
-                                        <form:input path="customerInfo.pinCode" class="form-control" placeholder="Pin Code" name="pinCode" id="pinCode" />
-                                    </div>
-                                    <div class="col-md-6 mb-3">
-                                       <!--  <input type="number" class="form-control" id="phone_number" min="0" placeholder="Phone No" value=""> -->
-                                       <form:input path="customerInfo.phone" class="form-control" placeholder="Phone" name="phone" id="phone" />
-                                    </div>
-                                    <div class="cart-btn mt-100">
-                               			 <form:button id="submit" name="submit" class="btn amado-btn w-100">Submit</form:button>
-                           			</div>
-                                    <!-- <div class="col-12 mb-3">
-                                        <textarea name="comment" class="form-control w-100" id="comment" cols="30" rows="10" placeholder="Leave a comment about your order"></textarea>
-                                    </div> -->
-
-                                </div>
-                           
+                        <div class="cart-table clearfix">
+                       
+                            <table class="table table-responsive">
+                             <c:forEach items="${orderInfoList}" var="orderInfoList" varStatus="varstatus">
+                                <thead>
+                                	<tr>
+                                        <th><span>Order Placed</span></th>
+                                        <th><span>Total</span></th>
+                                        <th><span>Order #</span></th>
+                                	</tr>
+                                    <tr>
+                                        <th><span><c:out value="${orderInfoList.orderDate}"/></span></th>
+                                        <th><span><c:out value="${orderInfoList.amount}"/></span></th>
+                                        <th><span><c:out value="${orderInfoList.orderNum}"/></span></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                <c:forEach items="${orderInfoList.details}" var="details" varStatus="dVarstatus">
+                                <tr>
+                                        <td class="cart_product_img">
+                                            <a href="#"><img src="${details.imageUrl}" alt="Product"></a>
+                                        </td>
+                                        <td class="cart_product_desc">
+                                            <h5><c:out value="${details.productName}"/></h5>
+                                        </td>
+                                        <td class="price">
+                                            <span><c:out value="${details.price}"/></span>
+                                        </td>
+                                        <td class="price">
+                                            <span><c:out value="${details.amount}"/></span>
+                                        </td>
+                                    </tr>
+                                    </c:forEach>
+                                    </tbody> 
+                                </c:forEach>
+                                     <!-- <tr>
+                                        <td class="cart_product_img">
+                                            <a href="#"><img src="img/bg-img/cart2.jpg" alt="Product"></a>
+                                        </td>
+                                        <td class="cart_product_desc">
+                                            <h5>Minimal Plant Pot</h5>
+                                        </td>
+                                        <td class="price">
+                                            <span>$10</span>
+                                        </td>
+                                        <td class="qty">
+                                            <div class="qty-btn d-flex">
+                                                <p>Qty</p>
+                                                <div class="quantity">
+                                                    <span class="qty-minus" onclick="var effect = document.getElementById('qty2'); var qty = effect.value; if( !isNaN( qty ) &amp;&amp; qty &gt; 1 ) effect.value--;return false;"><i class="fa fa-minus" aria-hidden="true"></i></span>
+                                                    <input type="number" class="qty-text" id="qty2" step="1" min="1" max="300" name="quantity" value="1">
+                                                    <span class="qty-plus" onclick="var effect = document.getElementById('qty2'); var qty = effect.value; if( !isNaN( qty )) effect.value++;return false;"><i class="fa fa-plus" aria-hidden="true"></i></span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="cart_product_img">
+                                            <a href="#"><img src="img/bg-img/cart3.jpg" alt="Product"></a>
+                                        </td>
+                                        <td class="cart_product_desc">
+                                            <h5>Minimal Plant Pot</h5>
+                                        </td>
+                                        <td class="price">
+                                            <span>$10</span>
+                                        </td>
+                                        <td class="qty">
+                                            <div class="qty-btn d-flex">
+                                                <p>Qty</p>
+                                                <div class="quantity">
+                                                    <span class="qty-minus" onclick="var effect = document.getElementById('qty3'); var qty = effect.value; if( !isNaN( qty ) &amp;&amp; qty &gt; 1 ) effect.value--;return false;"><i class="fa fa-minus" aria-hidden="true"></i></span>
+                                                    <input type="number" class="qty-text" id="qty3" step="1" min="1" max="300" name="quantity" value="1">
+                                                    <span class="qty-plus" onclick="var effect = document.getElementById('qty3'); var qty = effect.value; if( !isNaN( qty )) effect.value++;return false;"><i class="fa fa-plus" aria-hidden="true"></i></span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>  -->
+                                <%-- </c:if> --%>
+                                    <h3 id="noItemsMessageId" style="color:red; display:none;" align="center"></h3>
+                            </table>
                         </div>
                     </div>
                     <%-- <div class="col-12 col-lg-4">
@@ -196,28 +221,12 @@
                                 <li><span>delivery:</span> <span>Free</span></li>
                                 <li><span>total:</span> <span><c:out value="${cartInfo.subTotal}"/></span></li>
                             </ul>
-
-                            <div class="payment-method">
-                                <!-- Cash on delivery -->
-                                <div class="custom-control custom-checkbox mr-sm-2">
-                                    <input type="checkbox" class="custom-control-input" id="cod" checked>
-                                    <label class="custom-control-label" for="cod">Cash on Delivery</label>
-                                </div>
-                                <!-- Paypal -->
-                                <!-- <div class="custom-control custom-checkbox mr-sm-2">
-                                    <input type="checkbox" class="custom-control-input" id="paypal">
-                                    <label class="custom-control-label" for="paypal">Paypal <img class="ml-15" src="img/core-img/paypal.png" alt=""></label>
-                                </div> -->
-                            </div>
-
                             <div class="cart-btn mt-100">
-                              <!--   <a href="#" class="btn amado-btn w-100">Checkout</a> -->
-                                <form:button id="submit" name="submit" class="btn amado-btn w-100">Checkout</form:button>
+                                <a href="${pageContext.request.contextPath}/checkout" class="btn amado-btn w-100">Checkout</a>
                             </div>
                         </div>
                     </div> --%>
                 </div>
-                </form:form>
             </div>
         </div>
     </div>
@@ -301,7 +310,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
     <!-- ##### Footer Area End ##### -->
 
     <!-- ##### jQuery (Necessary for All JavaScript Plugins) ##### -->
-   <script src="script/jquery/jquery-2.2.4.min.js"></script>
+    <script src="script/jquery/jquery-2.2.4.min.js"></script>
     <!-- Popper js -->
     <script src="script/popper.min.js"></script>
     <!-- Bootstrap js -->
@@ -310,6 +319,16 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
     <script src="script/plugins.js"></script>
     <!-- Active js -->
     <script src="script/active.js"></script>
+
+	<c:if test="${not empty noItemsMsg}">
+    <script> 
+    $(window).on('load',function(){
+    	var msg = "${noItemsMsg}";
+    	$('#noItemsMessageId').show();
+        $('#noItemsMessageId').append(msg);
+    });
+    </script>
+</c:if>
 </body>
 
 </html>

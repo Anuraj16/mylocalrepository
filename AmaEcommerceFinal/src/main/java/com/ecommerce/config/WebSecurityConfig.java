@@ -48,10 +48,10 @@ new CustomFilter(), BasicAuthenticationFilter.class);*/
 
 		//below all pages require login
 		// user as well as admin pages
-		http.authorizeRequests().antMatchers("/home","/cart","/checkout").access("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')");
+		http.authorizeRequests().antMatchers("/home","/cart","/checkout","/addToCart").access("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')");
 
 		// admin only pages
-		http.authorizeRequests().antMatchers("/product").access("hasRole('ROLE_ADMIN')");
+		http.authorizeRequests().antMatchers("/product").access("hasAnyRole('ROLE_USER', 'ROLE_VENDOR')");
 
 		//access denied page
 		http.authorizeRequests().and().exceptionHandling().accessDeniedPage("/403");

@@ -47,7 +47,10 @@ public class CustomUserDetailService implements UserDetailsService{
 		for (UserRoleMapping userRole : userRoleList) {
 			if(userRole.getUserRoleMappingId().getRole_id()==1){
 				authority= new SimpleGrantedAuthority("ROLE_ADMIN");
-			}else{
+			}else if(userRole.getUserRoleMappingId().getRole_id()==3){
+				authority= new SimpleGrantedAuthority("ROLE_VENDOR");
+			}
+			else{
 				authority= new SimpleGrantedAuthority("ROLE_USER");
 			}
 			/*authority= new SimpleGrantedAuthority("ROLE_"+userRole.getUserRoleMappingId());*/

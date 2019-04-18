@@ -21,4 +21,6 @@ public Products findProduct(String code);
     public void save(ProductInfo productInfo);
     
     public List<Products> findAllProducts();
+    
+    public List<Products> findAllProductsForVendor(String username);
 }

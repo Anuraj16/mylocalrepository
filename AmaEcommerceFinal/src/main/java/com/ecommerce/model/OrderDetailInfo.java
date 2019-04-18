@@ -1,35 +1,27 @@
 package com.ecommerce.model;
 
+import com.ecommerce.entity.OrderDetails;
+
 public class OrderDetailInfo {
-	 private String id;
 	 
 	    private String productCode;
 	    private String productName;
 	 
-	    private int quanity;
+	    private long quanity;
 	    private double price;
 	    private double amount;
-	 
+	    private String imageUrl;
+	    
 	    public OrderDetailInfo() {
 	 
 	    }
 	 
-	    public OrderDetailInfo(String id, String productCode, //
-	            String productName, int quanity, double price, double amount) {
-	        this.id = id;
-	        this.productCode = productCode;
-	        this.productName = productName;
-	        this.quanity = quanity;
-	        this.price = price;
-	        this.amount = amount;
-	    }
-	 
-	    public String getId() {
-	        return id;
-	    }
-	 
-	    public void setId(String id) {
-	        this.id = id;
+	    public OrderDetailInfo(OrderDetails orderDetails) {
+	        this.productCode = orderDetails.getProduct_id();
+	        this.productName = orderDetails.getProduct_name();
+	        this.quanity = orderDetails.getQuantity();
+	        this.price = orderDetails.getPrice();
+	        this.amount = orderDetails.getTotal_amount();
 	    }
 	 
 	    public String getProductCode() {
@@ -48,14 +40,6 @@ public class OrderDetailInfo {
 	        this.productName = productName;
 	    }
 	 
-	    public int getQuanity() {
-	        return quanity;
-	    }
-	 
-	    public void setQuanity(int quanity) {
-	        this.quanity = quanity;
-	    }
-	 
 	    public double getPrice() {
 	        return price;
 	    }
@@ -71,4 +55,20 @@ public class OrderDetailInfo {
 	    public void setAmount(double amount) {
 	        this.amount = amount;
 	    }
+
+		public long getQuanity() {
+			return quanity;
+		}
+
+		public void setQuanity(long quanity) {
+			this.quanity = quanity;
+		}
+
+		public String getImageUrl() {
+			return imageUrl;
+		}
+
+		public void setImageUrl(String imageUrl) {
+			this.imageUrl = imageUrl;
+		}
 }

@@ -3,10 +3,12 @@ package com.ecommerce.model;
 import java.util.Date;
 import java.util.List;
 
+import com.ecommerce.entity.Order;
+import com.ecommerce.entity.OrderDetails;
+
 public class OrderInfo {
-	private String id;
     private Date orderDate;
-    private int orderNum;
+    private long orderNum;
     private double amount;
  
     private String customerName;
@@ -20,42 +22,23 @@ public class OrderInfo {
  
     }
  
-    public OrderInfo(String id, Date orderDate, int orderNum, //
-            double amount, String customerName, String customerAddress, //
-            String customerEmail, String customerPhone) {
-        this.id = id;
-        this.orderDate = orderDate;
-        this.orderNum = orderNum;
-        this.amount = amount;
+    public OrderInfo(Order order) {
+        this.orderDate = order.getOrder_date();
+        this.orderNum = order.getOrder_number();
+        this.amount = order.getTotal_amount();
  
-        this.customerName = customerName;
-        this.customerAddress = customerAddress;
-        this.customerEmail = customerEmail;
-        this.customerPhone = customerPhone;
+        this.customerName = order.getCustomer_name();
+        this.customerAddress = order.getCustomer_address();
+        this.customerEmail = order.getCustomer_email();
+        this.customerPhone = order.getCustomer_phone();
     }
- 
-    public String getId() {
-        return id;
-    }
- 
-    public void setId(String id) {
-        this.id = id;
-    }
- 
+
     public Date getOrderDate() {
         return orderDate;
     }
  
     public void setOrderDate(Date orderDate) {
         this.orderDate = orderDate;
-    }
- 
-    public int getOrderNum() {
-        return orderNum;
-    }
- 
-    public void setOrderNum(int orderNum) {
-        this.orderNum = orderNum;
     }
  
     public double getAmount() {
@@ -97,12 +80,20 @@ public class OrderInfo {
     public void setCustomerPhone(String customerPhone) {
         this.customerPhone = customerPhone;
     }
- 
-    public List<OrderDetailInfo> getDetails() {
-        return details;
-    }
- 
-    public void setDetails(List<OrderDetailInfo> details) {
-        this.details = details;
-    }
+
+	public long getOrderNum() {
+		return orderNum;
+	}
+
+	public void setOrderNum(long orderNum) {
+		this.orderNum = orderNum;
+	}
+
+	public List<OrderDetailInfo> getDetails() {
+		return details;
+	}
+
+	public void setDetails(List<OrderDetailInfo> details) {
+		this.details = details;
+	}
 }

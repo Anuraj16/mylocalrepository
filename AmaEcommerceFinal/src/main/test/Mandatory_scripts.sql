@@ -35,6 +35,7 @@ CREATE TABLE `products` (
   `productId` bigint(13) NOT NULL AUTO_INCREMENT,
   `productCodeSku` varchar(255) NOT NULL,
   `vendorProductId` varchar(255) DEFAULT NULL,
+  `vendorUsername` varchar(255) DEFAULT NULL,
   `productName` varchar(255) NOT NULL,
   `productDescription` nvarchar(2000) DEFAULT NULL,
   `supplierId` bigint(13) default NULL,
@@ -48,6 +49,7 @@ CREATE TABLE `products` (
   `discount` int(11) default NULL,
   `unitsInStock` int(11) default NULL,
   `destFilePath` nvarchar(2000) DEFAULT NULL,
+  `fileNames` nvarchar(2000) DEFAULT NULL,
   `dateCreated` datetime NOT NULL,
   `rowstate` int(11) default NULL,
   CONSTRAINT UNIQUE_PRODUCT_CODE UNIQUE (`productCodeSku`),
@@ -85,6 +87,7 @@ CREATE TABLE `OrderDetails` (
   `order_id` bigint(13) default NULL,
   `order_number` bigint(13) NOT NULL,
   `product_id` varchar(255) NOT NULL,
+  `product_name` varchar(255) NOT NULL,
   `price` bigint(13) NOT NULL,
   `quantity` bigint(13) NOT NULL,
   `discount` bigint(13) default NULL,
@@ -94,5 +97,10 @@ CREATE TABLE `OrderDetails` (
   `color` varchar(255) DEFAULT NULL,
   `date_created` datetime NOT NULL,
   `rowstate` int(11) default NULL,
-  PRIMARY KEY (`order_detailId`)
+  PRIMARY KEY (`order_detailId`),
+  CONSTRAINT `ORDER_DETAIL_ORDERID` FOREIGN KEY (`order_id`) REFERENCES `Orders` (`order_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+
+INSERT INTO `ecommerceapp`.`userrole` (`role_id`, `roleName`, `rowstate`) VALUES ('1', 'ADMIN', '1');
+INSERT INTO `ecommerceapp`.`userrole` (`role_id`, `roleName`, `rowstate`) VALUES ('2', 'USER', '1');
+INSERT INTO `ecommerceapp`.`userrole` (`role_id`, `roleName`, `rowstate`) VALUES ('3', 'VENDOR', '1');

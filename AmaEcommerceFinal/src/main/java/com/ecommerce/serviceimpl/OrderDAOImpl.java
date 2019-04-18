@@ -1,5 +1,6 @@
 package com.ecommerce.serviceimpl;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
@@ -63,6 +64,7 @@ public class OrderDAOImpl implements OrderDAO {
 	            detail.setOrder_number(orderNum);
 	            detail.setQuantity(line.getQuantity());
 	            detail.setProduct_id(line.getProductInfo().getProductCodeSku());
+	            detail.setProduct_name(line.getProductInfo().getProductName());
 	            detail.setDate_created(new Date());
 	            detail.setRowstate(1);
 	            //String code = line.getProductInfo().getCode();
@@ -104,14 +106,60 @@ public class OrderDAOImpl implements OrderDAO {
 	        return value;
 	    }
 	 
+	public List<OrderInfo> getAllOrders(String userName){
+		List<OrderInfo> orderInfoList = new ArrayList<OrderInfo>();
+		List<Order> orderList= new ArrayList<Order>();
+		List<OrderDetailInfo> orderDetailsList=null;
+		OrderInfo orderInfo= null;
+		System.out.println("userName "+userName);
+		 try {
+        	Session session = sessionFactory.getCurrentSession();
+ 	        Criteria crit = session.createCriteria(Order.class)
+ 	        		.add(Restrictions.eq("user_name", userName))
+ 	        		.add(Restrictions.ne("rowstate", -1));
+ 	       orderList= crit.list();
+ 	       System.out.println("order list size obtained from query "+orderList.size());
+ 	       for (Order order : orderList) {
+ 	    	  orderInfo= new OrderInfo(order);
+ 	    	  orderDetailsList=listOrderDetailInfos(orderInfo.getOrderNum());
+ 	    	  orderInfo.setDetails(orderDetailsList);
+ 	    	  orderInfoList.add(orderInfo);
+		}
+ 	       System.out.println("size of orderinfolist "+orderInfoList.size());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+       
+        /*if (value == null) {
+            return 0;
+        }*/
+        return orderInfoList;
+	}
 	public OrderInfo getOrderInfo(String orderId) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public List<OrderDetailInfo> listOrderDetailInfos(String orderId) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<OrderDetailInfo> listOrderDetailInfos(long order_number) {
+		List<OrderDetailInfo> orderDetailInfoList= new ArrayList<OrderDetailInfo>();
+		List<OrderDetails> orderDetailsList= new ArrayList<OrderDetails>();
+		OrderDetailInfo orderDetailInfo=null;
+		 try {
+        	Session session = sessionFactory.getCurrentSession();
+ 	        Criteria crit = session.createCriteria(OrderDetails.class)
+ 	        		.add(Restrictions.eq("order_number", order_number))
+ 	        		.add(Restrictions.ne("rowstate", -1));
+ 	       orderDetailsList= crit.list();
+ 	       for (OrderDetails orderDetails : orderDetailsList) {
+ 	    	  orderDetailInfo= new OrderDetailInfo(orderDetails);
+ 	    	 orderDetailInfoList.add(orderDetailInfo);
+ 	    	  
+		}
+ 	       System.out.println("size of orderlines for "+order_number+" is "+orderDetailsList.size());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+        return orderDetailInfoList;
 	}
 
 }
