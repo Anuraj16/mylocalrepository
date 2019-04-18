@@ -162,7 +162,7 @@ public class MainController {
 					if(cartLineInfo.getProductInfo().getProductCodeSku().equalsIgnoreCase(code)){
 						System.out.println("fetching product from req");
 						productInfo=cartLineInfo.getProductInfo();
-						productInfo.setQty(cartLineInfo.getQuantity());
+						productInfo.setQty(cartLineInfo.getQuantity()==0?1:cartLineInfo.getQuantity());
 					}
 				}
 			}
@@ -170,6 +170,9 @@ public class MainController {
 			if(productInfo==null){
 				System.out.println("fetching product from db");
 				productInfo = productDAO.findProductInfo(code);
+				if(productInfo.getQty()==0) {
+					productInfo.setQty(1);
+				}
 			}
 			System.out.println(productInfo.getProductName()+" desc "+productInfo.getProductDescription()+" file path "+productInfo.getDestFilePath());
 			productInfo.setImageUrlList(AmazonUtils.getImageListForProduct(productInfo));
@@ -253,13 +256,12 @@ public class MainController {
 	// Avoid UnexpectedRollbackException (See more explanations)
 	/* @Transactional(propagation = Propagation.NEVER)*/
 	public String productSave(Model model,
-			@ModelAttribute("productForm")  @Validated ProductInfo productForm,Authentication authentication,
-			BindingResult result 
+			@ModelAttribute("productForm")  @Validated ProductInfo productForm,
+			BindingResult result ,Authentication authentication
 			) {
 
 		System.out.println("in /product post ");
-		System.out.println(productForm.getProductName());
-		System.out.println("no of uploaded files "+productForm.getFileData().size());
+		
 		// System.out.println(productInfo.getFileData().getOriginalFilename());
 		if (result.hasErrors()) {
 			System.out.println("Product has errors");
@@ -421,6 +423,21 @@ public class MainController {
 	@RequestMapping(value = "/checkoutConfirmation", method = RequestMethod.POST)
 	public ModelAndView checkoutAndSave(HttpServletRequest request,Model model,
 			@ModelAttribute("customerInfo") CartInfo cartInfo) {
+		if( cartInfo.getCustomerInfo().getFirstName() == null || cartInfo.getCustomerInfo().getFirstName().isEmpty() ||
+				cartInfo.getCustomerInfo().getLastName() == null || cartInfo.getCustomerInfo().getLastName().isEmpty() ||	
+				cartInfo.getCustomerInfo().getEmailId() == null || cartInfo.getCustomerInfo().getEmailId().isEmpty() ||
+				cartInfo.getCustomerInfo().getAddress() == null || cartInfo.getCustomerInfo().getAddress().isEmpty() ||
+				cartInfo.getCustomerInfo().getCity() == null || cartInfo.getCustomerInfo().getCity().isEmpty() ||
+				cartInfo.getCustomerInfo().getPinCode()== null || cartInfo.getCustomerInfo().getPinCode().isEmpty() ||
+				cartInfo.getCustomerInfo().getPhone() == null || cartInfo.getCustomerInfo().getPhone().isEmpty() ||
+				cartInfo.getCustomerInfo().getCountry() == null || cartInfo.getCustomerInfo().getCountry().isEmpty() ) {
+			ModelAndView mav = new ModelAndView("checkout");
+			mav.addObject("cartInfo",cartInfo);
+			mav.addObject("emptyError", "Please fill out all fields");
+			return mav;
+		}
+		
+		
 		System.out.println("in checkout post action");
 		ModelAndView mav = new ModelAndView("checkoutConfirmation");
 		System.out.println(cartInfo.getCustomerInfo().getFirstName()+" lastname "+cartInfo.getCustomerInfo().getLastName());

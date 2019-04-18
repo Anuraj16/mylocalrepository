@@ -225,7 +225,7 @@
                                 <li><span>total:</span> <span><c:out value="${cartInfo.subTotal}"/></span></li>
                             </ul>
                             <div class="cart-btn mt-100">
-                                <a href="${pageContext.request.contextPath}/checkout" class="btn amado-btn w-100">Checkout</a>
+                                <a id="checkout" href="${pageContext.request.contextPath}/checkout" class="btn amado-btn w-100">Checkout</a>
                             </div>
                         </div>
                     </div>
@@ -329,6 +329,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
     	var msg = "${noItemsMsg}";
     	$('#noItemsMessageId').show();
         $('#noItemsMessageId').append(msg);
+        $('#checkout').hide();
     });
     </script>
 </c:if>
