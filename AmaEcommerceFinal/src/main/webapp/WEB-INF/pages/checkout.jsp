@@ -70,7 +70,7 @@
         <div class="cart-table-area section-padding-100">
             <div class="container-fluid">
             <form:form id="customerInfo" name="customerInfo" method="POST" commandName="cartInfo" 
-                             action="${pageContext.request.contextPath}/checkoutConfirmation">
+                             action="${pageContext.request.contextPath}/checkoutConfirmation" onsubmit = "return(validate());">
                 <div class="row">
                     <div class="col-12 col-lg-8">
                         <div class="checkout_details_area mt-50 clearfix">
@@ -78,21 +78,22 @@
                             <div class="cart-title">
                                 <h2>Checkout</h2>
                             </div>
+                            <h6 id="errorMessage" style="color:red;">All fields are mandatory</h6>
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
                                         <!-- <input type="text" class="form-control" id="first_name" value="" placeholder="First Name" required> -->
-                                        <form:input path="customerInfo.firstName" class="form-control" placeholder="Last Name" name="firstName" id="firstName" />
+                                        <form:input path="customerInfo.firstName" class="form-control" placeholder="First Name" name="firstName" id="firstName" />
                                     </div>
                                     <div class="col-md-6 mb-3">
                                         <!-- <input type="text" class="form-control" id="last_name" value="" placeholder="Last Name" required> -->
-                                        <form:input path="customerInfo.lastName" class="form-control" placeholder="First Name" name="lastName" id="lastName" />
+                                        <form:input path="customerInfo.lastName" class="form-control" placeholder="Last Name" name="lastName" id="lastName" />
                                     </div>
                                     <!-- <div class="col-12 mb-3">
                                         <input type="text" class="form-control" id="company" placeholder="Company Name" value="">
                                     </div> -->
                                     <div class="col-12 mb-3">
                                        <!--  <input type="email" class="form-control" id="email" placeholder="Email" value=""> -->
-                                       <form:input path="customerInfo.emailId" class="form-control" placeholder="Email" name="emailId" id="emailId" />
+                                       <form:input path="customerInfo.emailId" class="form-control" placeholder="Email" name="emailId" id="emailId" type="email" />
                                     </div>
                                     <div class="col-12 mb-3">
                                         <!-- <select class="w-100" id="country">
@@ -256,6 +257,67 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
     <script src="script/plugins.js"></script>
     <!-- Active js -->
     <script src="script/active.js"></script>
+    
+    <script>
+	function validate(){
+		if( document.customerInfo.firstName.value == "" ||  document.customerInfo.lastName.value == "" ||  document.customerInfo.emailId.value == "" ||  document.customerInfo.country.value == "" 
+			||  document.customerInfo.address.value == "" ||  document.customerInfo.city.value == "" ||  document.customerInfo.pinCode.value == "" ||  document.customerInfo.phone.value == "" ) {
+			 $('#errorMessage').text("Please fill out all fields"); 
+			if(document.customerInfo.firstName.value == ""){
+        	   document.customerInfo.firstName.style.border = "1px solid red";
+           }else{
+        	   document.customerInfo.firstName.style.border = "1px solid #ced4da";
+           }
+           if(document.customerInfo.lastName.value == ""){
+        	   document.customerInfo.lastName.style.border = "1px solid red";
+           }else{
+        	   document.customerInfo.lastName.style.border = "1px solid #ced4da";
+           }
+           if(document.customerInfo.emailId.value == ""){
+        	   document.customerInfo.emailId.style.border = "1px solid red";
+           }else{
+        	   document.customerInfo.emailId.style.border = "1px solid #ced4da";
+           }
+           if(document.customerInfo.country.value == ""){
+        	   document.customerInfo.country.style.border = "1px solid red";
+           }else{
+        	   document.customerInfo.country.style.border = "1px solid #ced4da";
+           }
+           if(document.customerInfo.address.value == ""){
+        	   document.customerInfo.address.style.border = "1px solid red";
+           }else{
+        	   document.customerInfo.address.style.border = "1px solid #ced4da";
+           }
+           if(document.customerInfo.city.value == ""){
+        	   document.customerInfo.city.style.border = "1px solid red";
+           }else{
+        	   document.customerInfo.city.style.border = "1px solid #ced4da";
+           }
+           if(document.customerInfo.pinCode.value == ""){
+        	   document.customerInfo.pinCode.style.border = "1px solid red";
+           }else{
+        	   document.customerInfo.pinCode.style.border = "1px solid #ced4da";
+           }
+           if(document.customerInfo.phone.value == ""){
+        	   document.customerInfo.phone.style.border = "1px solid red";
+           }else{
+        	   document.customerInfo.phone.style.border = "1px solid #ced4da";
+           }
+           
+           
+            return false;
+         }
+		return true;
+	}
+</script>
+<c:if test="${not empty emptyError}">
+    <script> 
+    $(window).on('load',function(){
+    	var msg = "${emptyError}";
+    	 $('#errorMessage').text(msg); 
+    });
+    </script>
+</c:if>
 </body>
 
 </html>
