@@ -54,7 +54,9 @@
     <!-- Search Wrapper Area End -->
     <!-- ##### Main Content Wrapper Start ##### -->
     <div class="main-content-wrapper d-flex clearfix">
-
+		<div id="notification" style="display: none;">
+  			<span class="dismiss"><a title="dismiss this notification">X</a></span>
+		</div>
         <!-- Mobile Nav (max width 767px)-->
         <div class="mobile-nav">
             <!-- Navbar Brand -->
@@ -233,6 +235,23 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
         $('#signUpSuccessMessage').text(msg);
         $('#loginErrorMessage').hide(); 	
         $('#signUpSuccessMessage').show(); 	
+    });
+    </script>
+</c:if>
+
+<c:if test="${not empty addedToCart}">
+    <script> 
+    $(window).on('load',function(){
+    	var msg = "${addedToCart}";
+    	$("#notification").fadeIn("slow").append(msg);
+    	
+    	$(".dismiss").click(function(){
+    	       $("#notification").fadeOut("slow");
+    	});
+    	
+    	setTimeout(function(){
+    		 $("#notification").fadeOut("slow");
+    		}, 3000);
     });
     </script>
 </c:if>

@@ -90,7 +90,8 @@ public class MainController {
 	}
 
 	@RequestMapping(value = {"/" , "/index" }, method = RequestMethod.GET)
-	public ModelAndView welcomePage(HttpServletRequest request, @ModelAttribute("user") UserInfo user,Authentication auth, @ModelAttribute("regError") String regError,@ModelAttribute("regSuccess") String regSuccess) {
+	public ModelAndView welcomePage(HttpServletRequest request, @ModelAttribute("user") UserInfo user,Authentication auth, @ModelAttribute("regError") String regError,@ModelAttribute("regSuccess") String regSuccess,
+			@ModelAttribute("addedToCart") String addedToCart	) {
 		System.out.println("entered /index ");
 		ModelAndView mav = new ModelAndView("index");
 		boolean is_vendor=false;
@@ -130,6 +131,7 @@ public class MainController {
 		mav.addObject("regError", regError);
 		System.out.println("regSuccess "+regSuccess);
 		mav.addObject("regSuccess", regSuccess);
+		mav.addObject("addedToCart", addedToCart);
 		mav.addObject("cartInfo", Utils.getCartInSession(request));
 		return mav;
 	}
@@ -372,8 +374,8 @@ public class MainController {
 
 	@RequestMapping({ "/addToCart" })
     public ModelAndView addToCart(HttpServletRequest request, Model model, //
-    		@ModelAttribute("productForm") ProductInfo productForm) {
-		ModelAndView mav = new ModelAndView("redirect:/productList");
+    		@ModelAttribute("productForm") ProductInfo productForm,RedirectAttributes ra) {
+		ModelAndView mav = new ModelAndView("redirect:/index");
 		System.out.println(" in addToCart action "+productForm.getProductCodeSku()+" qty "+productForm.getQty());
 		String code=productForm.getProductCodeSku();
         Products product = null;
@@ -392,8 +394,9 @@ public class MainController {
             Utils.setCartInSession(request, cartInfo);
         }
         // Redirect to shoppingCart page.
-        mav.addObject("user",new UserInfo());
-        mav.addObject("cartInfo", Utils.getCartInSession(request));
+        ra.addFlashAttribute("user",new UserInfo());
+        ra.addFlashAttribute("cartInfo", Utils.getCartInSession(request));
+        ra.addFlashAttribute("addedToCart",product.getProductName()+" added to cart successfully");
         return mav ;
     }
 	
