@@ -202,6 +202,17 @@
                               </div>
 							 </div>
 							 <button type="submit" name="addtocart" value="5" class="btn amado-btn">Add to cart</button>
+							 <div>
+							 <security:authorize  access="hasAnyRole('ROLE_VENDOR','ROLE_ADMIN')">
+							<div>
+							<br>
+							<button type="button" class="btn btn-primary"><a href="#" class="btn btn-link">
+      						<font size="3" color="white">Edit</font>  
+    						</a>
+    						</button>				 
+							 </div>
+							 </security:authorize>
+							 </div>
 							</form:form>
                         </div>
                     </div>

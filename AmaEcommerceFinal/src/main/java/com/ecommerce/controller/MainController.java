@@ -126,6 +126,7 @@ public class MainController {
 		mav.addObject("regError", regError);
 		System.out.println("regSuccess "+regSuccess);
 		mav.addObject("regSuccess", regSuccess);
+		mav.addObject("cartInfo", Utils.getCartInSession(request));
 		return mav;
 	}
 
@@ -179,6 +180,7 @@ public class MainController {
 		}
 		mav.addObject("user",new UserInfo());
 		mav.addObject("productForm",productInfo);
+		mav.addObject("cartInfo", Utils.getCartInSession(request));
 		return mav;
 	}
 
@@ -387,6 +389,7 @@ public class MainController {
         }
         // Redirect to shoppingCart page.
         mav.addObject("user",new UserInfo());
+        mav.addObject("cartInfo", Utils.getCartInSession(request));
         return mav ;
     }
 	
@@ -511,6 +514,7 @@ public class MainController {
         System.out.println("size of orderInfoList "+orderInfoList.size());
         mav.addObject("orderInfoList", orderInfoList);
         mav.addObject("user",new UserInfo());
+        mav.addObject("cartInfo", Utils.getCartInSession(request));
 		return mav;
 	}
 	
