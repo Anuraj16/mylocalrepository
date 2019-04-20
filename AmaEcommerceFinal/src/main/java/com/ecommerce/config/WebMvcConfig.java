@@ -24,7 +24,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
 	public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
 		StringHttpMessageConverter stringConverter = new StringHttpMessageConverter();
 		//stringConverter.setSupportedMediaTypes(Arrays.asList(new MediaType("text/html", "plain", UTF8)));
-		stringConverter.setSupportedMediaTypes(Arrays.asList(new MediaType("text", "html", UTF8)));
+		stringConverter.setSupportedMediaTypes(Arrays.asList(new MediaType("text", "html", UTF8),new MediaType("text", "plain", UTF8)));
 		converters.add(stringConverter);
 
 		// Add other converters ...

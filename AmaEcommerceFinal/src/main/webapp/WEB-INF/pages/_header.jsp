@@ -47,7 +47,7 @@
             </div> -->
             <!-- Cart Menu -->
             <div class="cart-fav-search mb-100">
-                <a href="${pageContext.request.contextPath}/cart" class="cart-nav"><img src="img/core-img/cart.png" alt=""> Cart <span>0</span></a>
+                <a href="${pageContext.request.contextPath}/cart" class="cart-nav"><img src="img/core-img/cart.png" alt=""> Cart <span id="cartCount">0</span></a>
               <!--   <a href="#" class="fav-nav"><img src="img/core-img/favorites.png" alt=""> Favourite</a>
                 <a href="#" class="search-nav"><img src="img/core-img/search.png" alt=""> Search</a> -->
             </div>
@@ -58,4 +58,21 @@
                 <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
                 <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
             </div>
+            <script src="script/jquery/jquery-2.2.4.min.js"></script>
+            <script>
+            $.ajax({
+                type: "get",
+                headers: {          
+                    Accept: "text/plain;charset=UTF-8"       
+                  },
+                url: "${pageContext.request.contextPath}/cartSize",      
+                success: function(data) {
+                	console.log(data);
+              	  $( "#cartCount" ).html( data );
+                },
+                error: function(){               	
+              	  $( "#cartCount" ).html( 0 );
+                }
+            });
+            </script>
         </header>

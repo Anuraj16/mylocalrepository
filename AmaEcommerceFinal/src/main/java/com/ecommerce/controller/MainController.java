@@ -15,6 +15,8 @@ import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Controller;
@@ -27,6 +29,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.multipart.support.ByteArrayMultipartFileEditor;
 import org.springframework.web.servlet.ModelAndView;
@@ -534,6 +538,13 @@ public class MainController {
 			binder.setValidator(productInfoValidator);
 			binder.registerCustomEditor(byte[].class, new ByteArrayMultipartFileEditor());
 		}
+	}
+	
+	@RequestMapping(value = "/cartSize", method = RequestMethod.GET,produces = MediaType.TEXT_PLAIN_VALUE)
+	@ResponseBody
+	@ResponseStatus(HttpStatus.OK)
+	public String getCartSize(HttpServletRequest request) {
+		return ""+Utils.getCartInSession(request).getCartLines().size();
 	}
 
 }
