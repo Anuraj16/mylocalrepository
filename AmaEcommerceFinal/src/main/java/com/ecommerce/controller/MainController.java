@@ -5,8 +5,11 @@ import java.io.IOException;
 import java.security.Principal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -37,7 +40,9 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3URI;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.ecommerce.Utils.AmazonUtils;
 import com.ecommerce.Utils.Utils;
@@ -122,7 +127,9 @@ public class MainController {
 			productInfo.setProductName(products.getProductName());
 			productInfo.setUnitPrice(products.getUnitPrice());
 			productInfo.setImageUrl(AmazonUtils.getImageForProduct(products));
-			productinfoList.add(productInfo);
+			if(productInfo.getImageUrl()!=null && productInfo.getImageUrl().length() >0){
+				productinfoList.add(productInfo);
+			}
 		}
 		System.out.println("User "+user.getFirstName());
 		mav.addObject("productinfoList",productinfoList);
@@ -243,13 +250,49 @@ public class MainController {
 	}
 
 	@RequestMapping(value = { "/product" }, method = RequestMethod.GET)
-	public ModelAndView product(Model model, @RequestParam(value = "code", defaultValue = "") String code) {
+	public ModelAndView product(Model model, @RequestParam(value = "code", defaultValue = "") String code,@RequestParam(value = "deletedImageName", defaultValue = "") String imageName,RedirectAttributes ra) {
 		ModelAndView mav = new ModelAndView("product");
 		ProductInfo productInfo = null;
 
 		System.out.println("in /product get ");
+		System.out.println("Code in product get "+code);
 		if (code != null && code.length() > 0) {
+			try {
+				if(imageName != null && imageName != ""){
+				Products products=productDAO.findProduct(code);
+				String filenames=products.getFileNames();
+				if(filenames!=null)
+				{
+					String[] fileNameArray=filenames.split(",");
+					List<String> fileNameList= new LinkedList<String>(Arrays.asList(fileNameArray));
+					System.out.println(fileNameList+" Array "+fileNameArray+" index of "+fileNameList.indexOf(imageName));
+					/*Iterator<String> itr = fileNameList.iterator();
+					String fName=null;
+					while(itr.hasNext()){
+						fName=itr.next();
+						if(fName.equalsIgnoreCase(imageName)){
+							itr.remove();
+						}
+					}*/
+					if(fileNameList.contains(imageName)){
+						fileNameList.remove(fileNameList.indexOf(imageName));
+					}
+					String fileNames="";
+					if(fileNameList !=null && fileNameList.size() >=0){
+						for (String filename : fileNameList) {
+							fileNames+=filename+",";
+						}
+					}
+					productDAO.updateProductImage(code, fileNames);
+				}
+				
+				}
+			} catch (Exception e) {
+				System.out.println("Some exception occurred "+e);
+				e.printStackTrace();
+			}
 			productInfo = productDAO.findProductInfo(code);
+			productInfo.setImageUrlList(AmazonUtils.getImageListForProduct(productInfo));
 		}
 		if (productInfo == null) {
 			productInfo = new ProductInfo();
@@ -371,6 +414,21 @@ public class MainController {
 		}
 		response.getOutputStream().close();
 	}
+	
+	@RequestMapping(value = { "/deleteImage" }, method = RequestMethod.GET)
+	public ModelAndView deleteImage(HttpServletRequest request, HttpServletResponse response, Model model,
+			@RequestParam("imageUri") String imageUri,RedirectAttributes ra) throws IOException {
+		System.out.println("in /deleteImage get ");
+		AmazonS3URI s3uri = new AmazonS3URI(imageUri);
+		System.out.println("s3uri.getBucket() "+s3uri.getBucket()+" "+s3uri.getKey()+" "+s3uri.getKey().substring(0, s3uri.getKey().indexOf("/")));
+		String imageName=s3uri.getKey().substring(s3uri.getKey().indexOf("/")+1, s3uri.getKey().length());
+		System.out.println("image name "+ imageName);
+		AmazonS3 s3client= AmazonUtils.gets3Client();
+		s3client.deleteObject(new DeleteObjectRequest(s3uri.getBucket(), s3uri.getKey()));
+		ra.addAttribute("code", s3uri.getKey().substring(0, s3uri.getKey().indexOf("/")));
+		ra.addAttribute("deletedImageName", imageName);
+		return new ModelAndView("redirect:/product");
+	}
 
 	@RequestMapping({ "/addToCart" })
     public ModelAndView addToCart(HttpServletRequest request, Model model, //
@@ -420,6 +478,38 @@ public class MainController {
 			mav.addObject("noItemsMsg", "Oops ! No items in the cart.");
 		}
         System.out.println("size of cartlines "+cartInfo.getCartLines().size());
+        mav.addObject("user",new UserInfo());
+		return mav;
+	}
+	
+	@RequestMapping(value = "/removeFromCart", method = RequestMethod.GET)
+	public ModelAndView removeFromCart(HttpServletRequest request,Model model,@RequestParam(value = "code") String code) {
+		System.out.println("in removeFromCart action");
+		ModelAndView mav = new ModelAndView("cart");
+		if(code != null){
+			CartInfo cartInfo = Utils.getCartInSession(request);
+			try {
+				Iterator<CartLineInfo> itr= cartInfo.getCartLines().iterator();
+				System.out.println("cartInfo.getCartLines() size befofre remove "+cartInfo.getCartLines().size());
+				CartLineInfo cartLineInfo =null;
+				while (itr.hasNext()){
+					cartLineInfo=(CartLineInfo) itr.next();
+					if(cartLineInfo.getProductInfo().getProductCodeSku().equalsIgnoreCase(code)){
+						itr.remove();
+						System.out.println("product removed");
+					}
+				}
+				System.out.println("cartInfo.getCartLines() size after remove "+cartInfo.getCartLines().size());
+			} catch (Exception e) {
+				e.printStackTrace();
+				System.out.println("Some exception occured "+e);
+			}
+			if(cartInfo.getCartLines().size()<=0){
+				mav.addObject("noItemsMsg", "Oops ! No items in the cart.");
+			}
+			Utils.setCartInSession(request, cartInfo);
+			mav.addObject("cartInfo",cartInfo);
+		} 
         mav.addObject("user",new UserInfo());
 		return mav;
 	}

@@ -206,7 +206,7 @@
 							 <security:authorize  access="hasAnyRole('ROLE_VENDOR','ROLE_ADMIN')">
 							<div>
 							<br>
-							<button type="button" class="btn btn-primary"><a href="#" class="btn btn-link">
+							<button type="button" class="btn btn-primary"><a href="${pageContext.request.contextPath}/product?code=${productForm.productCodeSku}" class="btn btn-link">
       						<font size="3" color="white">Edit</font>  
     						</a>
     						</button>				 

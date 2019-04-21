@@ -57,13 +57,16 @@ public class AmazonUtils {
 		try {
 			
 				String filenames=products.getFileNames();
-				String fileName=filenames.split(",")[0];
-				if(products.getDestFilePath() != null && products.getDestFilePath() != "")
-				{
-				fileUrl=products.getDestFilePath()+"/"+fileName;
-				}else{
-				fileUrl=endpointUrl+"/"+getBucketName()+"/"+fileName;
-				System.out.println("endpointfileurl "+endpointUrl+"/"+getBucketName()+"/"+fileName);
+				if(filenames != null){
+					String fileName=filenames.split(",")[0];
+					if(fileName !=null && fileName.length()>0){
+						System.out.println("filename not blank "+fileName.length());
+						if(products.getDestFilePath() != null && products.getDestFilePath() != ""){
+							fileUrl=products.getDestFilePath()+"/"+fileName;
+						}else{
+							fileUrl=endpointUrl+"/"+getBucketName()+"/"+fileName;
+						}
+					}
 				}
 		} catch (Exception e) {
 			e.printStackTrace();

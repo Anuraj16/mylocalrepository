@@ -64,13 +64,18 @@
       </div>
     </div>
  
-    <%-- <div class="control-group">
+     <div class="control-group">
       <form:label path="fileData" class="control-label">Image </form:label> 
       <div class="controls">
-         <img src="${pageContext.request.contextPath}/productImage?code=${productForm.productCodeSku}" width="100"/>
+      <c:forEach items="${productForm.imageUrlList}" var="imgUrlList" varStatus="varstatus">
+         <img src="${imgUrlList}" width="100"/>
+          <button type="button" class="btn btn-danger"><a href="${pageContext.request.contextPath}/deleteImage?imageUri=${imgUrlList}">
+         <font size="3" color="white">Delete</font>  
+         </a>
+         </button>
+          </c:forEach>
       </div>
-    </div> --%>
-    
+    </div> 
      <div class="control-group">
       <form:label path="fileData" class="control-label">Upload Image </form:label>
       <div class="controls">

@@ -109,6 +109,9 @@
                                                    <form:input path="${cartlines.quantity}" name="qty" id="qty" class="qty-text" step="1" min="1" max="300" value="1" />
                                                     <span class="qty-plus" onclick="var effect = document.getElementById('qty'); var qty = effect.value; if( !isNaN( qty )) effect.value++;return false;"><i class="fa fa-plus" aria-hidden="true"></i></span> --%>
                                                    <span> <c:out value="${cartlines.quantity}"/></span>
+                                                   <button type="button" class="close" aria-label="Close" style="margin-left:90px" title="Remove">
+  													<a href="${pageContext.request.contextPath}/removeFromCart?code=${cartlines.productInfo.productCodeSku}"><span aria-hidden="true" ><font color="red" size="3">X</font></span></a>
+   												 	</button>
                                                 </div>
                                             </div>
                                         </td>

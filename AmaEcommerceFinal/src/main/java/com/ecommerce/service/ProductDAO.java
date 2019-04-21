@@ -23,4 +23,7 @@ public Products findProduct(String code);
     public List<Products> findAllProducts();
     
     public List<Products> findAllProductsForVendor(String username);
+    
+    public void updateProductImage(String code,String imageName);
+    
 }

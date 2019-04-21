@@ -110,4 +110,25 @@ public class ProductDAOImpl implements ProductDAO {
 	        crit.add(Restrictions.ne("rowstate", -1));
 	        return ( List<Products>) crit.list();
 	}
+	
+	public void updateProductImage(String code,String imageName) {
+		Session session;
+		Products products =null;
+		System.out.println("updateProductImage code "+code+" imageName "+imageName);
+		 try {
+			    session = sessionFactory.getCurrentSession();
+			} catch (HibernateException e) {
+			    session = sessionFactory.openSession();
+			}
+		 try {
+			 Criteria crit = session.createCriteria(Products.class);
+		        crit.add(Restrictions.eq("productCodeSku", code));
+		        products=(Products) crit.uniqueResult();
+		        products.setFileNames(imageName);
+		        session.saveOrUpdate(products);
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Some exception occurred "+e);
+		}
+	}
 }

@@ -89,9 +89,6 @@
                         </div>
                     </a>
                 </div>
-                <div style="z-index: 1" class="clearfix">
-                   <button type="button" class="btn btn-primary">Primary</button>
-                 </div>
 				</c:forEach>
             </div>
         </div>
