@@ -29,6 +29,8 @@ public class AmazonUtils {
 			standard().
 			withCredentials(new AWSStaticCredentialsProvider(credentials)).
 			withRegion(Regions.AP_SOUTH_1).
+			/*enablePathStyleAccess().*/
+			disableChunkedEncoding().
 			build();
 	
 	public static File convertMultiPartToFile(CommonsMultipartFile file){

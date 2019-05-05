@@ -96,16 +96,6 @@
                                        <form:input path="customerInfo.emailId" class="form-control" placeholder="Email" name="emailId" id="emailId" type="email" />
                                     </div>
                                     <div class="col-12 mb-3">
-                                        <!-- <select class="w-100" id="country">
-                                        <option value="usa">United States</option>
-                                        <option value="uk">United Kingdom</option>
-                                        <option value="ger">Germany</option>
-                                        <option value="fra">France</option>
-                                        <option value="ind">India</option>
-                                        <option value="aus">Australia</option>
-                                        <option value="bra">Brazil</option>
-                                        <option value="cana">Canada</option>
-                                    </select> -->
                                     <form:input path="customerInfo.country" class="form-control" placeholder="Country" name="country" id="country" />
                                     </div>
                                     <div class="col-12 mb-3">
@@ -135,35 +125,6 @@
                            
                         </div>
                     </div>
-                    <%-- <div class="col-12 col-lg-4">
-                        <div class="cart-summary">
-                            <h5>Cart Total</h5>
-                            <ul class="summary-table">
-                                <li><span>subtotal:</span> <span><c:out value="${cartInfo.subTotal}"/></span></li>
-                                <li><span>delivery:</span> <span>Free</span></li>
-                                <li><span>total:</span> <span><c:out value="${cartInfo.subTotal}"/></span></li>
-                            </ul>
-
-                            <div class="payment-method">
-                                <!-- Cash on delivery -->
-                                <div class="custom-control custom-checkbox mr-sm-2">
-                                    <input type="checkbox" class="custom-control-input" id="cod" checked>
-                                    <label class="custom-control-label" for="cod">Cash on Delivery</label>
-                                </div>
-                                <!-- Paypal -->
-                                <!-- <div class="custom-control custom-checkbox mr-sm-2">
-                                    <input type="checkbox" class="custom-control-input" id="paypal">
-                                    <label class="custom-control-label" for="paypal">Paypal <img class="ml-15" src="img/core-img/paypal.png" alt=""></label>
-                                </div> -->
-                            </div>
-
-                            <div class="cart-btn mt-100">
-                              <!--   <a href="#" class="btn amado-btn w-100">Checkout</a> -->
-                                <form:button id="submit" name="submit" class="btn amado-btn w-100">Checkout</form:button>
-                            </div>
-                        </div>
-                    </div> --%>
-                </div>
                 </form:form>
             </div>
         </div>
@@ -196,55 +157,7 @@
     <!-- ##### Newsletter Area End ##### -->
 
     <!-- ##### Footer Area Start ##### -->
-    <footer class="footer_area clearfix">
-        <div class="container">
-            <div class="row align-items-center">
-                <!-- Single Widget Area -->
-                <div class="col-12 col-lg-4">
-                    <div class="single_widget_area">
-                        <!-- Logo -->
-                        <div class="footer-logo mr-50">
-                            <a href="${pageContext.request.contextPath}/index"><img src="img/core-img/logoz.png" alt=""></a>
-                        </div>
-                        <!-- Copywrite Text -->
-                        <p class="copywrite">
-Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved
-</p>
-                    </div>
-                </div>
-                <!-- Single Widget Area -->
-                <div class="col-12 col-lg-8">
-                    <div class="single_widget_area">
-                        <!-- Footer Menu -->
-                        <div class="footer_menu">
-                            <nav class="navbar navbar-expand-lg justify-content-end">
-                                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#footerNavContent" aria-controls="footerNavContent" aria-expanded="false" aria-label="Toggle navigation"><i class="fa fa-bars"></i></button>
-                                <div class="collapse navbar-collapse" id="footerNavContent">
-                                    <ul class="navbar-nav ml-auto">
-                                        <li class="nav-item active">
-                                            <a class="nav-link" href="${pageContext.request.contextPath}/index">Home</a>
-                                        </li>
-                                        <%-- <li class="nav-item">
-                                            <a class="nav-link" href="${pageContext.request.contextPath}/shop">Shop</a>
-                                        </li> --%>
-                                      <%--   <li class="nav-item">
-                                            <a class="nav-link" href="${pageContext.request.contextPath}/productDetails">Product</a>
-                                        </li> --%>
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="${pageContext.request.contextPath}/cart">Cart</a>
-                                        </li>
-                                        <%-- <li class="nav-item">
-                                            <a class="nav-link" href="${pageContext.request.contextPath}/checkout">Checkout</a>
-                                        </li> --%>
-                                    </ul>
-                                </div>
-                            </nav>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </footer>
+    <jsp:include page="_footer.jsp"/>
     <!-- ##### Footer Area End ##### -->
 	<jsp:include page="_loginPopup.jsp"/>
     <!-- ##### jQuery (Necessary for All JavaScript Plugins) ##### -->

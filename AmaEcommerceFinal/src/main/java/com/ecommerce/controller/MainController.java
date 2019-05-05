@@ -1,7 +1,9 @@
 package com.ecommerce.controller;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.security.Principal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -12,6 +14,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
@@ -41,8 +44,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3URI;
+import com.amazonaws.services.s3.S3ClientOptions;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
+import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.ecommerce.Utils.AmazonUtils;
 import com.ecommerce.Utils.Utils;
@@ -182,7 +187,6 @@ public class MainController {
 			}
 			
 			if(productInfo==null){
-				System.out.println("fetching product from db");
 				productInfo = productDAO.findProductInfo(code);
 				if(productInfo.getQty()==0) {
 					productInfo.setQty(1);
@@ -213,8 +217,6 @@ public class MainController {
 				userInfo.getLastName()==null || userInfo.getLastName().isEmpty() ||
 				userInfo.getPassword()==null || userInfo.getPassword().isEmpty()  ||
 				userInfo.getUsername()==null || userInfo.getUsername().isEmpty() ) {
-			System.out.println("sizew of checkbox array "+userInfo.getUserType().length);
-			System.out.println("Mandatory fiel dis empty");
 			ra.addFlashAttribute("regError", "Please fill all mandatory fields");
 			return new ModelAndView("redirect:/index");
 		}
@@ -265,15 +267,6 @@ public class MainController {
 				{
 					String[] fileNameArray=filenames.split(",");
 					List<String> fileNameList= new LinkedList<String>(Arrays.asList(fileNameArray));
-					System.out.println(fileNameList+" Array "+fileNameArray+" index of "+fileNameList.indexOf(imageName));
-					/*Iterator<String> itr = fileNameList.iterator();
-					String fName=null;
-					while(itr.hasNext()){
-						fName=itr.next();
-						if(fName.equalsIgnoreCase(imageName)){
-							itr.remove();
-						}
-					}*/
 					if(fileNameList.contains(imageName)){
 						fileNameList.remove(fileNameList.indexOf(imageName));
 					}
@@ -315,23 +308,16 @@ public class MainController {
 
 		System.out.println("in /product post ");
 		
-		// System.out.println(productInfo.getFileData().getOriginalFilename());
 		if (result.hasErrors()) {
 			System.out.println("Product has errors");
 			return "product";
 		}
 		try {
 			List<CommonsMultipartFile> files = productForm.getFileData();
-			//List<String> fileNames = new ArrayList<String>();
 			File productImageDirectory= new File("E:/Product Images/"+productForm.getProductCodeSku());
 			if(!productImageDirectory.exists()){
 				productImageDirectory.mkdirs();
 			}
-			
-			/*Amazon Aws Upload code*/
-			
-			
-			
 			String destFilePath=null;
 			String fileNames="";
 			if (null != files && files.size() > 0)
@@ -342,34 +328,25 @@ public class MainController {
 			        String fileName = AmazonUtils.generateFileName(multipartFile);
 					System.out.println("amazon file "+file+" fileName "+fileName);
 					fileNames+=fileName+",";					
-					//String fileName = multipartFile.getOriginalFilename();
 					System.out.println("filename "+fileName);
 					if(file !=null && fileName !=null && fileName != "" ){
-						/*code to upload files to local system start*/
-					//	fileNames.add(fileName);
-						/*File imageFile = new File(productImageDirectory, fileName);
-						try
-						{
-							multipartFile.transferTo(imageFile);
-						} catch (IOException e)
-						{
-							e.printStackTrace();
-						}*/
-						/*code to upload files to local system end*/
 						try {
 							AmazonS3 s3client= AmazonUtils.gets3Client();
+							//added to resolve error while uploading images to bucket through beanstalk
 							String bucketName=AmazonUtils.getBucketName();
-							s3client.putObject(new PutObjectRequest(bucketName, productForm.getProductCodeSku()+"/"+fileName, file)
-				            .withCannedAcl(CannedAccessControlList.PublicRead));
+							System.out.println("bucket name in save product "+bucketName+" product code "+productForm.getProductCodeSku());
+							
+							//InputStream is=new FileInputStream(file);                                                                       
+							//s3client.putObject(new PutObjectRequest(bucketName, productForm.getProductCodeSku()+"/"+fileName,is,new ObjectMetadata())); 
+							
+							s3client.putObject(new PutObjectRequest(bucketName, productForm.getProductCodeSku()+"/"+fileName, file).
+							withCannedAcl(CannedAccessControlList.PublicReadWrite));
 							destFilePath=AmazonUtils.endpointUrl+"/"+bucketName+"/"+productForm.getProductCodeSku();
 							productForm.setDestFilePath(destFilePath);
 						} catch (Exception e) {
-							// TODO: handle exception
+							System.out.println("error in uploading files to s3 bucket");
+							e.printStackTrace();
 						}
-						
-						
-						/*code to upload images to amazon s3 bucket */
-						
 					}
 				}
 				System.out.println("fileNames "+fileNames.substring(0, fileNames.length()-1));
@@ -390,12 +367,6 @@ public class MainController {
 	@RequestMapping({ "/productList" })
 	public ModelAndView listProductHandler(Model model) {
 		ModelAndView mav = new ModelAndView("redirect:/index");
-
-		// List<ProductInfo> productinfoList= productDAO.findAllProducts();
-		/*  PaginationResult<ProductInfo> result = productDAO.queryProducts(page, //
-                maxResult, maxNavigationPage, likeName);*/
-		//	System.out.println("productinfoList size "+productinfoList.size());
-		// mav.addObject("productinfoList", productinfoList);
 		return mav;
 	}
 
@@ -409,8 +380,6 @@ public class MainController {
 		}
 		if (product != null && product.getDestFilePath() != null) {
 			response.setContentType("image/jpeg, image/jpg, image/png, image/gif");
-			/*  TODO read the image from the destination file path and return*/
-			// response.getOutputStream().write(product.getImage());
 		}
 		response.getOutputStream().close();
 	}

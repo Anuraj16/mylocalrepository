@@ -44,3 +44,10 @@ border:0;
     color: red;
     font-style: italic;
 }
+
+.footer_area {
+padding: 10px 0px !important;
+}
+p.copywrite {
+ padding-top: 10%;
+}

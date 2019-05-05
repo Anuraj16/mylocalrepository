@@ -117,48 +117,6 @@
                                         </td>
                                     </tr>
                                 </c:forEach>
-                                   <!--  <tr>
-                                        <td class="cart_product_img">
-                                            <a href="#"><img src="img/bg-img/cart2.jpg" alt="Product"></a>
-                                        </td>
-                                        <td class="cart_product_desc">
-                                            <h5>Minimal Plant Pot</h5>
-                                        </td>
-                                        <td class="price">
-                                            <span>$10</span>
-                                        </td>
-                                        <td class="qty">
-                                            <div class="qty-btn d-flex">
-                                                <p>Qty</p>
-                                                <div class="quantity">
-                                                    <span class="qty-minus" onclick="var effect = document.getElementById('qty2'); var qty = effect.value; if( !isNaN( qty ) &amp;&amp; qty &gt; 1 ) effect.value--;return false;"><i class="fa fa-minus" aria-hidden="true"></i></span>
-                                                    <input type="number" class="qty-text" id="qty2" step="1" min="1" max="300" name="quantity" value="1">
-                                                    <span class="qty-plus" onclick="var effect = document.getElementById('qty2'); var qty = effect.value; if( !isNaN( qty )) effect.value++;return false;"><i class="fa fa-plus" aria-hidden="true"></i></span>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="cart_product_img">
-                                            <a href="#"><img src="img/bg-img/cart3.jpg" alt="Product"></a>
-                                        </td>
-                                        <td class="cart_product_desc">
-                                            <h5>Minimal Plant Pot</h5>
-                                        </td>
-                                        <td class="price">
-                                            <span>$10</span>
-                                        </td>
-                                        <td class="qty">
-                                            <div class="qty-btn d-flex">
-                                                <p>Qty</p>
-                                                <div class="quantity">
-                                                    <span class="qty-minus" onclick="var effect = document.getElementById('qty3'); var qty = effect.value; if( !isNaN( qty ) &amp;&amp; qty &gt; 1 ) effect.value--;return false;"><i class="fa fa-minus" aria-hidden="true"></i></span>
-                                                    <input type="number" class="qty-text" id="qty3" step="1" min="1" max="300" name="quantity" value="1">
-                                                    <span class="qty-plus" onclick="var effect = document.getElementById('qty3'); var qty = effect.value; if( !isNaN( qty )) effect.value++;return false;"><i class="fa fa-plus" aria-hidden="true"></i></span>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr> -->
                                 </tbody>
                                 <%-- </c:if> --%>
                                     <h3 id="noItemsMessageId" style="color:red; display:none;" align="center"></h3>
@@ -210,55 +168,7 @@
     <!-- ##### Newsletter Area End ##### -->
 
     <!-- ##### Footer Area Start ##### -->
-    <footer class="footer_area clearfix">
-        <div class="container">
-            <div class="row align-items-center">
-                <!-- Single Widget Area -->
-                <div class="col-12 col-lg-4">
-                    <div class="single_widget_area">
-                        <!-- Logo -->
-                        <div class="footer-logo mr-50">
-                            <a href="${pageContext.request.contextPath}/index"><img src="img/core-img/logoz.png" alt=""></a>
-                        </div>
-                        <!-- Copywrite Text -->
-                        <p class="copywrite">
-Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved
-</p>
-                    </div>
-                </div>
-                <!-- Single Widget Area -->
-                <div class="col-12 col-lg-8">
-                    <div class="single_widget_area">
-                        <!-- Footer Menu -->
-                        <div class="footer_menu">
-                            <nav class="navbar navbar-expand-lg justify-content-end">
-                                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#footerNavContent" aria-controls="footerNavContent" aria-expanded="false" aria-label="Toggle navigation"><i class="fa fa-bars"></i></button>
-                                <div class="collapse navbar-collapse" id="footerNavContent">
-                                    <ul class="navbar-nav ml-auto">
-                                        <li class="nav-item active">
-                                            <a class="nav-link" href="${pageContext.request.contextPath}/index">Home</a>
-                                        </li>
-                                        <%-- <li class="nav-item">
-                                            <a class="nav-link" href="${pageContext.request.contextPath}/shop">Shop</a>
-                                        </li> --%>
-                                      <%--   <li class="nav-item">
-                                            <a class="nav-link" href="${pageContext.request.contextPath}/productDetails">Product</a>
-                                        </li> --%>
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="${pageContext.request.contextPath}/cart">Cart</a>
-                                        </li>
-                                        <%-- <li class="nav-item">
-                                            <a class="nav-link" href="${pageContext.request.contextPath}/checkout">Checkout</a>
-                                        </li> --%>
-                                    </ul>
-                                </div>
-                            </nav>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </footer>
+    <jsp:include page="_footer.jsp"/>
     <!-- ##### Footer Area End ##### -->
 	<jsp:include page="_loginPopup.jsp"/>
     <!-- ##### jQuery (Necessary for All JavaScript Plugins) ##### -->
