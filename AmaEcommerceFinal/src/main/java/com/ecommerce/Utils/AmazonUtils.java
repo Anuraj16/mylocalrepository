@@ -21,9 +21,11 @@ import com.ecommerce.model.ProductInfo;
 public class AmazonUtils {
 
 	public static String endpointUrl="https://s3.ap-south-1.amazonaws.com";
+	static String accessKey="";
+	static String secretKey="";
 	static AWSCredentials credentials = new BasicAWSCredentials(
-			  "AKIAVJGH6YWGDPV5TUN2", 
-			  "fvOvEWIIxRQKOjnLVsyBgnSn8iomJ/PVU1kIHJ7w"
+			accessKey, 
+			secretKey
 			);
 	static AmazonS3 s3client = AmazonS3ClientBuilder.
 			standard().
